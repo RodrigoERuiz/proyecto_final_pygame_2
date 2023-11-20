@@ -29,6 +29,8 @@ class Item( pygame.sprite.Sprite):
         self.rect.y = y
         self.frame_tiempo_anterior = pygame.time.get_ticks()
         self.frame_tiempo_intervalo = 100  # Intervalo entre cambios de fotograma en milisegundos
+        self.item_activo = True
+        self.tiempo_reaparicion =  10000 #10 segundos
 
     def update(self):
         tiempo_actual = pygame.time.get_ticks()
@@ -38,4 +40,12 @@ class Item( pygame.sprite.Sprite):
             self.image = self.animacion[self.frame_actual]
     
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        if self.item_activo:
+            screen.blit(self.image, self.rect)
+        
+    def desactivar(self):
+        self.item_activo = False
+    
+    def activar(self):
+        self.item_activo = True
+        
