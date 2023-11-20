@@ -28,10 +28,9 @@ plataformas.add(plataforma_tres)
 
 grupo_proyectiles = pygame.sprite.Group()
 
-
-grupo_frutas = pygame.sprite.Group()
 fruta = Item(425,358)
-fruta_dos = Item(ANCHO_VENTANA-100,10)
+grupo_frutas = pygame.sprite.Group()
+fruta_dos = Item(ANCHO_VENTANA-100,400)
 grupo_frutas.add(fruta)
 grupo_frutas.add(fruta_dos)
 
@@ -57,7 +56,7 @@ while its_running:
     jugador.mover(teclas_presionadas,lista_eventos,grupo_proyectiles)
     jugador.actualizar(plataformas, grupo_frutas)
     SCREEN.blit(pygame.transform.scale(jugador.animacion_actual[jugador.frame_actual],(jugador.height,jugador.width)), jugador.rect)
-    
+
     
     #plataforma
     for plataforma in plataformas:
@@ -87,18 +86,25 @@ while its_running:
                 enemigo.hacer_animacion('die')
                 enemigo.kill()
                 enemigo.actualizar()
-                # tiempo_actual = pygame.time.get_ticks()
-                # if tiempo_actual-enemigo.frame_tiempo_anterior > enemigo.frame_tiempo_intervalo:
-                #     enemigo.kill()
+
                 
-                
+
         
     grupo_proyectiles.update()
     grupo_proyectiles.draw(SCREEN)
     SurfaceManager.draw_text(SCREEN, f'Puntuación: {str(jugador.score)}', 25, ANCHO_VENTANA // 2, 10)
     SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)
-    fruta.draw(SCREEN)
-    fruta.update()
+    
+    
+    for fruta in grupo_frutas:
+        fruta.draw(SCREEN)
+        if jugador.rect.colliderect(fruta.rect):
+            if jugador.vida < 100:
+                jugador.vida += 10
+                fruta.kill()
+        fruta.update()
+    
+    
     pygame.display.update()
 
 

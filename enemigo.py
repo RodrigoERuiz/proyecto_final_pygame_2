@@ -158,6 +158,6 @@ class Enemigo(pygame.sprite.Sprite):
         lista_retorno = []
         
         for i in range(n):
-            enemigo = Enemigo(random.randint(0,ANCHO_VENTANA),ALTO_VENTANA-height,random.randint(1,8))
+            enemigo = Enemigo(random.randint(0,ANCHO_VENTANA),ALTO_VENTANA-height,random.randint(1,5))
             lista_retorno.append(enemigo)
         return lista_retorno

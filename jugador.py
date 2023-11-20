@@ -66,7 +66,7 @@ class Jugador :
         self.is_looking_right = True
         self.is_jump = False
         self.image= self.animacion_actual[self.frame_actual]
-        self.velocidad_y = -10
+        self.velocidad_y = 0
         #self.piso = pygame.draw.rect(SCREEN, (255, 0, 0), (0, 521, ANCHO_VENTANA, ALTO_VENTANA))  # Ejemplo de coordenadas y tamaño
         self.height = self.image.get_height() 
         self.width = self.image.get_width()
@@ -101,10 +101,10 @@ class Jugador :
                 self.coord_x += plataforma.velocidad_x
                 self.coord_y += plataforma.velocidad_y
         ######################################################################
-        for fruta in grupo_frutas:
-            if self.rect.colliderect(fruta):
-                fruta.kill()
-                self.vida += 10         
+        # for fruta in grupo_frutas:
+        #     if self.rect.colliderect(fruta):
+        #         fruta.kill()
+        #         self.vida += 10         
         
         self.controlar_limites_pantalla()
         tiempo_actual = pygame.time.get_ticks()
@@ -150,7 +150,7 @@ class Jugador :
             #SALTAR
         if lista_teclas[pygame.K_SPACE] and not self.is_jump:
             self.is_jump = True
-            self.velocidad_y = 15 
+            self.velocidad_y = 12
         #disaparo
         for evento in lista_eventos:
             if  evento.type == pygame.KEYDOWN:
