@@ -5,6 +5,7 @@ from plataforma import *
 import pygame
 from auxiliar import *
 from item import Item
+from trampa import Trampa
 
 
 pygame.init()
@@ -13,7 +14,7 @@ reloj = pygame.time.Clock()
 its_running = True
 
 jugador = Jugador(70,0,5)
-enemigos = Enemigo.crear_lista_de_enemigos(5,120)
+enemigos = Enemigo.crear_lista_de_enemigos(3,120)
 grupo_enemigos = pygame.sprite.Group()
 grupo_enemigos.add(enemigos)
 
@@ -34,6 +35,13 @@ fruta_dos = Item(ANCHO_VENTANA-100,400)
 grupo_frutas.add(fruta)
 grupo_frutas.add(fruta_dos)
 
+trampas = pygame.sprite.Group()
+trampa = Trampa(457, 365)
+trampa_dos = Trampa(649, 266)
+trampa_tres = Trampa(247, 470)
+trampas.add(trampa)
+trampas.add(trampa_dos)
+trampas.add(trampa_tres)
 
 while its_running:
     reloj.tick(FPS)
@@ -103,7 +111,13 @@ while its_running:
                 jugador.vida += 10
                 fruta.kill()
         fruta.update()
-    
+        
+    for trampa in trampas:
+        if jugador.rect.colliderect(trampa.rect):
+            jugador.vida -= 5
+        trampa.update()
+        trampa.draw(SCREEN)
+
     
     pygame.display.update()
 

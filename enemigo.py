@@ -125,12 +125,19 @@ class Enemigo(pygame.sprite.Sprite):
                 
     def mover(self):
         self.animar()
+        tiempo = pygame.time.get_ticks()
         if self.rect.right >= ANCHO_VENTANA:
             self.direccion = -1  # Cambiar a la izquierda si alcanza el borde derecho
-            self.animacion_actual = self.walk_l
+            if tiempo % 2 == 0:
+                self.animacion_actual = self.walk_l
+            else: 
+                self.animacion_actual = self.attack_l
         elif self.rect.left <= 0:
             self.direccion = 1   # Cambiar a la derecha si alcanza el borde izquierdo
-            self.animacion_actual = self.walk_r
+            if tiempo % 2 == 0:
+                self.animacion_actual = self.walk_r
+            else:
+                self.animacion_actual = self.attack_r
         # Mover en la dirección correspondiente
         self.rect.x += self.velocidad * self.direccion
         
