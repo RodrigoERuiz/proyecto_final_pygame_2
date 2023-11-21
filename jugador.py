@@ -8,42 +8,42 @@ from proyectil import Proyectil
 class Jugador :
     def __init__(self, coord_x, coord_y, velocidad) -> None:
         self.stand_r = [
-                        pygame.image.load('recursos/sprites/Stand/0.png'),
-                        pygame.image.load('recursos/sprites/Stand/1.png'),
-                        pygame.image.load('recursos/sprites/Stand/2.png'),
-                        pygame.image.load('recursos/sprites/Stand/3.png'),
-                        pygame.image.load('recursos/sprites/Stand/4.png'),
-                        pygame.image.load('recursos/sprites/Stand/5.png'),
-                        pygame.image.load('recursos/sprites/Stand/6.png'),
-                        pygame.image.load('recursos/sprites/Stand/7.png'),
-                        pygame.image.load('recursos/sprites/Stand/8.png'),
-                        pygame.image.load('recursos/sprites/Stand/9.png')
+                        pygame.image.load('recursos/sprites/Stand/0.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/1.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/2.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/3.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/4.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/5.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/6.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/7.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/8.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Stand/9.png').convert_alpha()
                     ]
         
         self.walk_r = [
-                        pygame.image.load('recursos/sprites/Walk/0.png'),
-                        pygame.image.load('recursos/sprites/Walk/1.png'),
-                        pygame.image.load('recursos/sprites/Walk/2.png'),
-                        pygame.image.load('recursos/sprites/Walk/3.png'),
-                        pygame.image.load('recursos/sprites/Walk/4.png'),
-                        pygame.image.load('recursos/sprites/Walk/5.png'),
-                        pygame.image.load('recursos/sprites/Walk/6.png'),
-                        pygame.image.load('recursos/sprites/Walk/7.png'),
-                        pygame.image.load('recursos/sprites/Walk/8.png'),
-                        pygame.image.load('recursos/sprites/Walk/9.png')
+                        pygame.image.load('recursos/sprites/Walk/0.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/1.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/2.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/3.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/4.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/5.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/6.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/7.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/8.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Walk/9.png').convert_alpha()
                     ]
         
         self.run_r = [
-                        pygame.image.load('recursos/sprites/Run/0.png'),
-                        pygame.image.load('recursos/sprites/Run/1.png'),
-                        pygame.image.load('recursos/sprites/Run/2.png'),
-                        pygame.image.load('recursos/sprites/Run/3.png'),
-                        pygame.image.load('recursos/sprites/Run/4.png'),
-                        pygame.image.load('recursos/sprites/Run/5.png'),
-                        pygame.image.load('recursos/sprites/Run/6.png'),
-                        pygame.image.load('recursos/sprites/Run/7.png'),
-                        pygame.image.load('recursos/sprites/Run/8.png'),
-                        pygame.image.load('recursos/sprites/Run/9.png')
+                        pygame.image.load('recursos/sprites/Run/0.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/1.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/2.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/3.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/4.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/5.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/6.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/7.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/8.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Run/9.png').convert_alpha()
                     ]
 
         #imagenes de animacion escaladas

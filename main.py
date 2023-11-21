@@ -104,16 +104,7 @@ while its_running:
     SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)
     
     
-    # for fruta in grupo_frutas:
-    #     if fruta.item_activo:
-    #         fruta.draw(SCREEN)
-    #         if jugador.rect.colliderect(fruta.rect):
-    #             if jugador.vida < 100:
-    #                 jugador.vida += 10
-    #                 fruta.desactivar()
-    #                 fruta.tiempo_reaparicion = pygame.time.get_ticks() + 10000
-    #                 # fruta.kill()
-    #     tiempo_actual = pygame.time.get_ticks()
+
                 
     for fruta in grupo_frutas:
         if fruta.item_activo:
