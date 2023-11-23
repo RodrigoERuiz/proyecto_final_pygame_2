@@ -1,3 +1,4 @@
+from typing import Any
 import pygame, random   
 from constantes import *
 
@@ -12,6 +13,8 @@ class Plataforma(pygame.sprite.Sprite):
         self.rect.y = y
         self.velocidad_x = 0 #cambiar valores para mover
         self.velocidad_y = 0 #cambiar valores para mover
+        self.top_collision_rect = pygame.Rect(self.rect.left + 5, self.rect.top, self.rect.width - 10, 5)
+        
 
     def mover_plataforma(self):     
         self.rect.x += self.velocidad_x
@@ -22,7 +25,21 @@ class Plataforma(pygame.sprite.Sprite):
 
         if self.rect.bottom >= ALTO_VENTANA or self.rect.top <= 0:
             self.velocidad_y *= -1
-
+    
+    def update(self,  screen: pygame.surface, grupo_plataformas: pygame.sprite.Group) -> None:
+        
+        for plataforma in grupo_plataformas:
+            plataforma.draw(screen)
+            if DEBUG:   
+                screen.blit(plataforma.image,plataforma.rect)
+            #plataforma.mover_plataforma() Decidí no mover las plataformas en el primer nivel
+        
+  
+    def draw(self, screen: pygame.surface):
+        screen.blit(self.image,self.rect)
+        #screen.blit(self.top_collision_rect.topleft, self.rect)
+        
+        
         
 
         

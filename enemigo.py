@@ -158,8 +158,6 @@ class Enemigo(pygame.sprite.Sprite):
         self.mover()
 
         
-        
-        
     @staticmethod
     def crear_lista_de_enemigos(n,height):
         lista_retorno = []

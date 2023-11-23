@@ -18,9 +18,9 @@ enemigos = Enemigo.crear_lista_de_enemigos(3,120)
 grupo_enemigos = pygame.sprite.Group()
 grupo_enemigos.add(enemigos)
 
-plataforma = Plataforma(200,500,100)
-plataforma_dos = Plataforma(400,400,100)
-plataforma_tres = Plataforma(600,300,100)
+plataforma = Plataforma(0,500,100)
+plataforma_dos = Plataforma(300,400,100)
+plataforma_tres = Plataforma(550,300,100)
 
 plataformas = pygame.sprite.Group()
 plataformas.add(plataforma)
@@ -41,7 +41,7 @@ trampa_dos = Trampa(649, 266)
 trampa_tres = Trampa(247, 470)
 trampas.add(trampa)
 trampas.add(trampa_dos)
-trampas.add(trampa_tres)
+trampas.add(trampa_tres) 
 
 while its_running:
     reloj.tick(FPS)
@@ -61,6 +61,8 @@ while its_running:
     #Jugador
     if DEBUG:
         pygame.draw.rect(SCREEN, (255, 0, 0), jugador.rect, 2)
+        pygame.draw.rect(SCREEN, (0, 255 ,0),jugador.rec_ground,2)
+        
     jugador.mover(teclas_presionadas,lista_eventos,grupo_proyectiles)
     jugador.actualizar(plataformas, grupo_frutas)
     SCREEN.blit(pygame.transform.scale(jugador.animacion_actual[jugador.frame_actual],(jugador.height,jugador.width)), jugador.rect)
@@ -69,10 +71,13 @@ while its_running:
     #plataforma
     for plataforma in plataformas:
         if DEBUG:   
-            SCREEN.blit(plataforma.image,plataforma.rect)
-        plataforma.mover_plataforma()
+            #SCREEN.blit(plataforma.image,plataforma.rect)
+            plataforma.draw(SCREEN)
+        #plataforma.mover_plataforma()
         if plataforma.rect.colliderect(jugador.rect): #sacar esto de acá
-            if plataforma.rect.top <= jugador.rect.bottom:
+            if plataforma.rect.top < jugador.rect.bottom:
+                #jugador.rect.y = plataforma.rect.top - jugador.height
+                jugador.en_plataforma = True
                 jugador.velocidad_y = 0
                 jugador.is_jump = False
 

@@ -78,12 +78,25 @@ class Jugador :
         self.vida = 100
         self.en_suelo = False
         self.score = 0
+        self.en_plataforma = False
+        self.hay_que_aplicar_gravedad = True
+        #self.rec_ground = pygame.Rect(self.rect.left, self.rect.bottom, self.rect.width /3 - 20, 10)
+        self.rec_ground = pygame.Rect(self.rect.centerx - ((self.rect.width / 3 - 20) / 2), self.rect.bottom - 10, self.rect.width / 3 - 20, 10)
+
+
+
+
+
+
+        
         
     def aplicar_gravedad(self):
-        if self.is_jump or self.coord_y < ALTO_VENTANA - self.height: #aca estoy aplicando gravedad cuando el personaje salta o cuando no esta en el piso
-            #poner la animacion de saltar
-            self.coord_y -= self.velocidad_y
-            self.velocidad_y -= 1  
+        if self.is_jump or self.en_plataforma or self.coord_y < ALTO_VENTANA - self.height: #aca estoy aplicando gravedad cuando el personaje salta o cuando no esta en el piso
+           # poner la animacion de saltar
+            # self.coord_y -= self.velocidad_y
+            # self.rec_ground.y  -= self.velocidad_y
+            self.add_y(- self.velocidad_y)
+            self.velocidad_y -= 1     #ver si esto es necesario
             
             #Esto controla que el jugador no se vaya por abajo de la pantalla ARREGLAR INTEGRAR A COTROLAR_LIMITES_PANTALLA
             if self.coord_y >= ALTO_VENTANA - self.height:  
@@ -95,11 +108,16 @@ class Jugador :
     def actualizar(self,plataformas:pygame.sprite.Group, grupo_frutas:pygame.sprite.Group):
         self.rect.x = self.coord_x
         self.rect.y = self.coord_y
+        #self.rec_ground.x = self.coord_x esta es la linea original
+        self.rec_ground.x = self.rect.centerx-10
+        self.rec_ground.y = self.rect.bottom -30
+        
         ################ Si el jugador está sobre la plataforma###############
-        for plataforma in plataformas:
-            if self.rect.colliderect(plataforma.rect) and self.velocidad_y >= 0:    
-                self.coord_x += plataforma.velocidad_x
-                self.coord_y += plataforma.velocidad_y
+        # for plataforma in plataformas:
+        #     if self.rect.colliderect(plataforma.rect) and self.velocidad_y >= 0:    
+        #         self.coord_x += plataforma.velocidad_x
+        #         self.coord_y += plataforma.velocidad_y
+                
         ######################################################################
         # for fruta in grupo_frutas:
         #     if self.rect.colliderect(fruta):
@@ -121,24 +139,28 @@ class Jugador :
         if lista_teclas[pygame.K_d] and lista_teclas[pygame.K_LSHIFT]:
             self.animacion_actual = self.run_r
             self.is_looking_right = True
-            self.coord_x += self.velocidad_run   
+            self.coord_x += self.velocidad_run  
+            self.rec_ground.x += self.velocidad_run  
             
           #CORRER A LA IZQUIERDA  
         elif lista_teclas[pygame.K_a] and lista_teclas[pygame.K_LSHIFT]:
             self.animacion_actual = self.run_l
             self.is_looking_right = False
-            self.coord_x -= self.velocidad_run   
+            self.coord_x -= self.velocidad_run
+            self.rec_ground.x -=  self.velocidad_run
             #CAMINAR A LA DERECHA
             
         elif lista_teclas[pygame.K_d]:
             self.animacion_actual = self.walk_r
             self.coord_x += self.velocidad_walk
+            self.rec_ground.x += self.velocidad_walk
             self.is_looking_right = True
             
             #CAMINAR A LA IZQUIERDA
         elif lista_teclas[pygame.K_a]:
             self.animacion_actual = self.walk_l
             self.coord_x -= self.velocidad_walk
+            self.rec_ground.x -= self.velocidad_walk
             self.is_looking_right = False
             #QUEDARSE QUIETO
         else:
@@ -182,5 +204,14 @@ class Jugador :
     def disparar(self):
         proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
         return proyectil
+    
+    def add_x(self, delta_x):
+        self.rect.x += delta_x
+        self.rec_ground.x += delta_x
+    
+    def add_y(self, delta_y):
+        self.coord_y += delta_y
+        self.rec_ground.y += delta_y
+        
 
 #(69, 521) x,y piso
