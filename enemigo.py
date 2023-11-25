@@ -76,6 +76,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.frame_actual = 0
         self.animacion_actual = self.stand_l
         self.image = self.animacion_actual[self.frame_actual]
+        #self.image = pygame.transform.scale(self.image,(80,80)) #borrar si queda mal
         self.rect = self.image.get_rect()
         self.velocidad  = velocidad
         self.height = self.image.get_height() 

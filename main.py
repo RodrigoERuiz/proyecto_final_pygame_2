@@ -52,27 +52,18 @@ while its_running:
             break
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             print(evento)
-    
+            
     SCREEN.blit(backgound,(0,0))
     
     teclas_presionadas = pygame.key.get_pressed()
-    plataformas.draw(SCREEN)
+    
     
     #Jugador
     jugador.draw(SCREEN)
     jugador.mover(teclas_presionadas,lista_eventos,grupo_proyectiles)
     jugador.actualizar(plataformas, grupo_frutas)
-    
 
-    
-    #plataforma
-    for plataforma in plataformas:
-        plataforma.draw(SCREEN)
-        if plataforma.top_collision_rect.top <= jugador.rect.bottom and plataforma.top_collision_rect.colliderect(jugador.rect):
-                jugador.rect.bottom = plataforma.top_collision_rect.top
-                jugador.velocidad_y = 0
-                jugador.is_jump = False
-
+    plataforma.update(SCREEN,jugador,plataformas)
     
     #Enemigos
     for enemigo in grupo_enemigos:

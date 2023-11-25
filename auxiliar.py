@@ -1,13 +1,13 @@
 import json
-import pygame as pg, random
-from plataforma import *
+import pygame, random
+#from plataforma import *
 
 class SurfaceManager:
 
     @staticmethod
-    def get_surface_from_spritesheet(img_path: str, cols: int, rows: int, step = 1, flip: bool = False) -> list[pg.surface.Surface]:
+    def get_surface_from_spritesheet(img_path: str, cols: int, rows: int, step = 1, flip: bool = False) -> list[pygame.surface.Surface]:
         sprites_list = list()
-        surface_img = pg.image.load(img_path)
+        surface_img = pygame.image.load(img_path)
         frame_width = int(surface_img.get_width()/cols)
         frame_height = int(surface_img.get_height()/rows)
 
@@ -22,19 +22,19 @@ class SurfaceManager:
                 )
 
                 if flip:
-                    frame_surface = pg.transform.flip(frame_surface, True, False)
+                    frame_surface = pygame.transform.flip(frame_surface, True, False)
                 sprites_list.append(frame_surface)
         return sprites_list
     
     @staticmethod
     def girar_sprites(lista_imagenes)->list:
-       return [pg.transform.flip(imagen, True, False) for imagen in lista_imagenes]
+       return [pygame.transform.flip(imagen, True, False) for imagen in lista_imagenes]
     
     @staticmethod
-    def preparar_imagen(lista_imagenes:list[pg.Surface], ancho, alto,):
+    def preparar_imagen(lista_imagenes:list[pygame.Surface], ancho, alto,):
         lista_retorno = []
         for imagen in lista_imagenes:
-            imagen_escalada = pg.transform.scale(imagen,(ancho,alto))
+            imagen_escalada = pygame.transform.scale(imagen,(ancho,alto))
             lista_retorno.append(imagen_escalada)
         return lista_retorno
     

@@ -1,7 +1,7 @@
 import pygame
 from constantes import *
 from auxiliar import SurfaceManager
-from plataforma import Plataforma
+
 from proyectil import Proyectil
 
 
