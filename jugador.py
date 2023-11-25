@@ -54,11 +54,12 @@ class Jugador :
         self.walk_r = SurfaceManager.preparar_imagen(self.walk_r, 50,90)
         self.walk_l = SurfaceManager.girar_sprites(self.walk_r)
         
-
+        self.configs ={}
+        self.configs = SurfaceManager.get_config('config.json').get('player')
         self.coord_x = coord_x
         self.coord_y = coord_y
         self.velocidad_walk = velocidad
-        self.velocidad_run = 10
+        self.velocidad_run = self.configs.get('velocidad_run')
         self.frame_actual = 0
         self.animacion_actual = self.stand_r
         self.frame_tiempo_anterior = pygame.time.get_ticks()
@@ -75,7 +76,7 @@ class Jugador :
         self.hubo_colision_previa = False
         self.tiempo_entre_colisiones = 1000  # 1000 milisegundos (1 segundo)
         self.tiempo_ultima_colision = 0 
-        self.vida = 100
+        self.vida = self.configs.get('vida')
         self.en_suelo = False
         self.score = 0
         #self.rect_ground = pygame.Rect(self.rect.centerx - ((self.rect.width / 3 - 20) / 2), self.rect.bottom - 10, self.rect.width / 3 - 20, 10)

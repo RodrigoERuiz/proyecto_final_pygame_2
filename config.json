@@ -1,0 +1,13 @@
+{
+    "player":{
+        
+            "vida": 100,
+            "velocidad_run": 10
+            },
+    
+    "nivel_1":{
+
+        
+    }
+
+}

@@ -1,3 +1,4 @@
+import json
 import pygame as pg, random
 from plataforma import *
 
@@ -59,4 +60,13 @@ class SurfaceManager:
     @staticmethod
     def game_over():
         return True
-    
+
+    @staticmethod
+    def get_config(path:str):
+        try:
+            with open(path, 'r', encoding='UTF-8') as archivo:
+                lista_de_jugadores = json.load(archivo)
+                return lista_de_jugadores
+        except FileNotFoundError:
+            print("Error: Archivo no encontrado")
+            return None
