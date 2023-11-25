@@ -87,6 +87,13 @@ class Enemigo(pygame.sprite.Sprite):
         self.lives = 3
         self.rect.y = self.coord_y #verficar si conviene dejarlo afuera
         
+    def draw(self,screen:pygame.surface):
+        screen.blit(self.animacion_actual[self.frame_actual],self.rect)
+        if DEBUG:
+            pygame.draw.rect(SCREEN, (0, 255, 0), self.rect, 2)
+            
+        
+        
     def esta_muerto(self):
         return self.lives == 0
         
@@ -157,6 +164,8 @@ class Enemigo(pygame.sprite.Sprite):
         self.controlar_limites_pantalla()
         self.mover()
 
+        
+        
         
     @staticmethod
     def crear_lista_de_enemigos(n,height):

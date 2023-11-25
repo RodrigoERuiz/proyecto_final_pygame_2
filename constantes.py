@@ -3,7 +3,7 @@ import pygame
 ANCHO_VENTANA = 800
 ALTO_VENTANA = 600
 FPS = 30
-DEBUG = True
+DEBUG = False
 
 SCREEN = pygame.display.set_mode((ANCHO_VENTANA,ALTO_VENTANA))
 

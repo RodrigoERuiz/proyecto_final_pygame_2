@@ -55,3 +55,8 @@ class SurfaceManager:
         relleno = pygame.Rect(x, y, relleno, alto_barra)
         pygame.draw.rect(pantalla, 'green', relleno)
         pygame.draw.rect(pantalla, 'white', borde_barra, 2)
+    
+    @staticmethod
+    def game_over():
+        return True
+    
