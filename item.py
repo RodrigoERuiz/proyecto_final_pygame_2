@@ -1,4 +1,5 @@
 import pygame
+from jugador import Jugador
 
 class Item( pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -32,8 +33,27 @@ class Item( pygame.sprite.Sprite):
         self.item_activo = True
         self.tiempo_reaparicion =  10000 #10 segundos
 
-    def update(self):
+    def update(self,grupo_frutas:pygame.sprite.Group(),screen:pygame.Surface,jugador:Jugador):
         tiempo_actual = pygame.time.get_ticks()
+        
+        for fruta in grupo_frutas:
+            if fruta.item_activo:
+                fruta.draw(screen)
+                if jugador.rect.colliderect(fruta.rect):
+                    if jugador.vida < 100:
+                        jugador.vida += 10
+                        fruta.desactivar()
+                        fruta.tiempo_reaparicion = pygame.time.get_ticks() + 10000
+            else:
+                tiempo_actual = pygame.time.get_ticks()
+                if tiempo_actual >= fruta.tiempo_reaparicion:
+                    fruta.activar()  # Reactivar la fruta después de 10 segundos
+        #fruta.update()
+        
+        
+        
+        
+        
         if tiempo_actual - self.frame_tiempo_anterior > self.frame_tiempo_intervalo:
             self.frame_tiempo_anterior = tiempo_actual
             self.frame_actual = (self.frame_actual + 1) % len(self.animacion)

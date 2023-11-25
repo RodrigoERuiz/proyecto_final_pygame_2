@@ -104,20 +104,11 @@ class Jugador :
                 self.velocidad_y = 0
         
 
-    def actualizar(self,plataformas:pygame.sprite.Group, grupo_frutas:pygame.sprite.Group):
+    def actualizar(self,plataformas:pygame.sprite.Group, grupo_frutas:pygame.sprite.Group, lista_eventos, lista_teclas, screen: pygame.Surface, proyectiles:pygame.sprite.Group):
+        self.draw(screen)
+        self.mover(lista_teclas,lista_eventos,proyectiles)
         self.rect.x = self.coord_x
         self.rect.y = self.coord_y
-        ################ Si el jugador está sobre la plataforma###############
-        for plataforma in plataformas:
-            if self.rect.colliderect(plataforma.rect) and self.velocidad_y >= 0:    
-                self.coord_x += plataforma.velocidad_x
-                self.coord_y += plataforma.velocidad_y
-        ######################################################################
-        # for fruta in grupo_frutas:
-        #     if self.rect.colliderect(fruta):
-        #         fruta.kill()
-        #         self.vida += 10         
-        
         self.controlar_limites_pantalla()
         tiempo_actual = pygame.time.get_ticks()
         if tiempo_actual - self.frame_tiempo_anterior > self.frame_tiempo_intervalo:
@@ -193,9 +184,10 @@ class Jugador :
         
         if tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
             if self.rect.colliderect(rect) and not self.hubo_colision_previa:
-                print("Hubo colisión")
+                if DEBUG:
+                    print("Hubo colisión")
+                    print(f'Te quedan: {self.vida} puntos de vida')
                 self.vida -= 10
-                print(f'Te quedan: {self.vida} puntos de vida')
                 self.hubo_colision_previa = True
                 self.tiempo_ultima_colision = tiempo_actual
         else:

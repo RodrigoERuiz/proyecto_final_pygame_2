@@ -7,7 +7,6 @@ from auxiliar import *
 from item import Item
 from trampa import Trampa
 
-
 pygame.init()
 reloj = pygame.time.Clock()
 
@@ -54,16 +53,13 @@ while its_running:
             print(evento)
             
     SCREEN.blit(backgound,(0,0))
-    
+
     teclas_presionadas = pygame.key.get_pressed()
     
     
-    #Jugador
-    jugador.draw(SCREEN)
-    jugador.mover(teclas_presionadas,lista_eventos,grupo_proyectiles)
-    jugador.actualizar(plataformas, grupo_frutas)
-
+    jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles)
     plataforma.update(SCREEN,jugador,plataformas)
+    fruta.update(grupo_frutas,SCREEN,jugador)
     
     #Enemigos
     for enemigo in grupo_enemigos:
@@ -80,32 +76,12 @@ while its_running:
                 enemigo.kill()
                 enemigo.actualizar()
 
-                
-
         
     grupo_proyectiles.update()
     grupo_proyectiles.draw(SCREEN)
     SurfaceManager.draw_text(SCREEN, f'Puntuación: {str(jugador.score)}', 25, ANCHO_VENTANA // 2, 10)
     SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)
-    
-    
-
-                
-    for fruta in grupo_frutas:
-        if fruta.item_activo:
-            fruta.draw(SCREEN)
-            if jugador.rect.colliderect(fruta.rect):
-                if jugador.vida < 100:
-                    jugador.vida += 10
-                    fruta.desactivar()
-                    fruta.tiempo_reaparicion = pygame.time.get_ticks() + 10000
-        else:
-            tiempo_actual = pygame.time.get_ticks()
-            if tiempo_actual >= fruta.tiempo_reaparicion:
-                fruta.activar()  # Reactivar la fruta después de 10 segundos
-        fruta.update()
-
-        
+     
     for trampa in trampas:
         if jugador.rect.colliderect(trampa.rect):
             jugador.vida -= 5
@@ -114,8 +90,7 @@ while its_running:
 
     if jugador.vida <= 0:
         its_running = False
-    #print(f'vida restante: {jugador.vida}')
-    
+   
     
     pygame.display.update()
 
