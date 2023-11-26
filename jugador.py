@@ -81,6 +81,7 @@ class Jugador :
         self.score = 0
         #self.rect_ground = pygame.Rect(self.rect.centerx - ((self.rect.width / 3 - 20) / 2), self.rect.bottom - 10, self.rect.width / 3 - 20, 10)
         self.rect_ground = pygame.Rect(self.rect.left+10, self.rect.bottom-10, self.width,10)
+        self.nivel_actual = 1
         
         
     def draw(self,screen:pygame.surface):
@@ -215,6 +216,9 @@ class Jugador :
         
     def esta_muerto(self)->bool:
         return self.vida <= 0
+    
+
+            
 
             
             #SurfaceManager.game_over()

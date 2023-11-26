@@ -131,7 +131,7 @@ class Enemigo(pygame.sprite.Sprite):
             self.coord_x = 0
             
                 
-    def mover(self):
+    def mover(self): #pasarle al jugador por parametro y en caso que este en nivel 2 o mas dotarlos de mas habilidades 
         self.animar()
         tiempo = pygame.time.get_ticks()
         if self.rect.right >= ANCHO_VENTANA:

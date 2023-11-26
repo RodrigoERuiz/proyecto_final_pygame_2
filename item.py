@@ -1,5 +1,6 @@
-import pygame
+import pygame,random
 from jugador import Jugador
+from constantes import *
 
 class Item( pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -68,4 +69,13 @@ class Item( pygame.sprite.Sprite):
     
     def activar(self):
         self.item_activo = True
+        
+    @staticmethod
+    def crear_lista_de_frutas(n, x, y):
+        lista_retorno = []
+        
+        for i in range(n):
+            fruta = Item(x, y)
+            lista_retorno.append(fruta)
+        return lista_retorno
         
