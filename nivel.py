@@ -1,4 +1,5 @@
 import pygame
+from jugador import Jugador
 
 class Nivel:
     def __init__(self, pantalla, jugador, plataformas, background) -> None:
@@ -9,3 +10,8 @@ class Nivel:
         
     def update(self, lista_eventos):
         pass
+    
+    
+    
+    
+    def

@@ -10,9 +10,28 @@ from trampa import Trampa
 pygame.init()
 reloj = pygame.time.Clock()
 
+'''
+Hacer algo del estilo de
+crear una bandera de si el nivel 1 esta terminado. Si no lo está, en la variable configuraciones cargo el nivel 1 sino alguno de los otros
+'''
+nivel_1_terminado = False
+nivel_2_terminado = False
+nivel_3_terminado = False
+
+if not nivel_1_terminado:
+    configuraciones = SurfaceManager.get_config('config.json').get('nivel_1') #Usar esta variable para cambiar de nivel
+elif not nivel_2_terminado:
+    configuraciones = SurfaceManager.get_config('config.json').get('nivel_2')
+
+path = configuraciones.get('background')
+fondo = pygame.image.load(path)
+fondo = pygame.transform.scale(fondo,(ANCHO_VENTANA,ALTO_VENTANA))
+
+
 its_running = True
 
 jugador = Jugador(70,0,5)
+
 enemigos = Enemigo.crear_lista_de_enemigos(3,120)
 grupo_enemigos = pygame.sprite.Group()
 grupo_enemigos.add(enemigos)
@@ -51,8 +70,23 @@ while its_running:
             break
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             print(evento)
-            
-    SCREEN.blit(backgound,(0,0))
+    #print(f'vidas:{jugador.vida}')
+    if jugador.esta_muerto(): break
+    
+    print(nivel_1_terminado)
+    if nivel_1_terminado:
+        nivel_1_terminado=None
+        configuraciones = SurfaceManager.get_config('config.json').get('nivel_2')
+        path = configuraciones.get('background')
+        fondo = pygame.image.load(path)
+        fondo = pygame.transform.scale(fondo,(ANCHO_VENTANA,ALTO_VENTANA))
+        jugador.vida = 100
+        enemigos = Enemigo.crear_lista_de_enemigos(configuraciones.get('cantidad_enemigos'),120)
+        grupo_enemigos = pygame.sprite.Group()
+        grupo_enemigos.add(enemigos)
+        
+    SCREEN.blit(fondo,(0,0))
+    
 
     teclas_presionadas = pygame.key.get_pressed()
     
@@ -62,7 +96,10 @@ while its_running:
     fruta.update(grupo_frutas,SCREEN,jugador)
     
     #Enemigos
+    enemigos_vivos = len(grupo_enemigos)
     for enemigo in grupo_enemigos:
+        
+        print(f'enemigos vivos {enemigos_vivos}')
         enemigo.draw(SCREEN)
         enemigo.actualizar()
         jugador.hubo_colision(enemigo.rect)
@@ -75,6 +112,9 @@ while its_running:
                 enemigo.hacer_animacion('die')
                 enemigo.kill()
                 enemigo.actualizar()
+    if enemigos_vivos == 0:
+        nivel_1_terminado = True
+        #print('nivel terminado')
 
         
     grupo_proyectiles.update()
@@ -86,11 +126,7 @@ while its_running:
         if jugador.rect.colliderect(trampa.rect):
             jugador.vida -= 5
     trampas.update()
-    trampas.draw(SCREEN)
-
-    if jugador.vida <= 0:
-        its_running = False
-   
+    trampas.draw(SCREEN)   
     
     pygame.display.update()
 

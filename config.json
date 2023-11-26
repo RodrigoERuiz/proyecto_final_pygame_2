@@ -7,10 +7,29 @@
     
     "nivel_1":{
 
-        "plataformas_coord": [
+        "plataformas_coord":[
 
-            
-        ]
+            {"x":200, "y":500},
+            {"x":400, "y":400},
+            {"x":400, "y":400}
+        ],
+
+        "background": "recursos/backgrounds/41530.jpg",
+        "cantidad_enemigos" : 3
+        
+    },
+    "nivel_2":{
+
+        "plataformas_coord":[
+
+            {"x":100, "y":500},
+            {"x":300, "y":400},
+            {"x":500, "y":400}
+        ],
+
+        "background": "recursos/backgrounds/forest.png",
+        "cantidad_enemigos":5
+        
     }
 
 }

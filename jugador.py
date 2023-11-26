@@ -122,20 +122,20 @@ class Jugador :
         
     def mover(self, lista_teclas: list,lista_eventos, grupo_proyectiles:pygame.sprite.Group ):
             #CORRER DERECHA
-        if lista_teclas[pygame.K_d] and lista_teclas[pygame.K_LSHIFT]:
+        if lista_teclas[pygame.K_d] and lista_teclas[pygame.K_LSHIFT]  and not self.is_jump:
             self.animacion_actual = self.run_r
             self.is_looking_right = True
             #self.coord_x += self.velocidad_run
             self.add_x(self.velocidad_run)
             
           #CORRER A LA IZQUIERDA  
-        elif lista_teclas[pygame.K_a] and lista_teclas[pygame.K_LSHIFT]:
+        elif lista_teclas[pygame.K_a] and lista_teclas[pygame.K_LSHIFT] and not self.is_jump:
             self.animacion_actual = self.run_l
             self.is_looking_right = False
             #self.coord_x -= self.velocidad_run  
             self.add_x(-self.velocidad_run)
-            #CAMINAR A LA DERECHA
             
+            #CAMINAR A LA DERECHA
         elif lista_teclas[pygame.K_d]:
             self.animacion_actual = self.walk_r
             #self.coord_x += self.velocidad_walk
@@ -164,7 +164,7 @@ class Jugador :
         #DISPARO
         for evento in lista_eventos:
             if  evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_e:
+                if evento.key == pygame.K_e and not self.is_jump:
                     proyectil = self.disparar()
                     grupo_proyectiles.add(proyectil)
             
@@ -214,8 +214,9 @@ class Jugador :
         self.rect_ground.y = delta_y
         
     def esta_muerto(self)->bool:
-        if self.vida <= 0:
-            return False
+        return self.vida <= 0
+
+            
             #SurfaceManager.game_over()
         
 
