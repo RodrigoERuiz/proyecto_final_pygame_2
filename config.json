@@ -6,6 +6,10 @@
             },
     
     "nivel_1":{
+        
+        "background": "recursos/backgrounds/41530.jpg",
+        "cantidad_enemigos" : 3,
+        "cantidad_frutas" : 2,
 
         "plataformas_coord":[
 
@@ -14,9 +18,6 @@
             {"x":400, "y":400}
         ],
 
-        "background": "recursos/backgrounds/41530.jpg",
-        "cantidad_enemigos" : 3,
-        "cantidad_frutas" : 2,
         "coordenadas_frutas" : [
 
             {"x":425, "y":358},
@@ -34,6 +35,10 @@
     },
     "nivel_2":{
 
+        "background": "recursos/backgrounds/forest.png",
+        "cantidad_enemigos" : 8,
+        "cantidad_frutas" : 2,
+
         "plataformas_coord":[
 
             {"x":100, "y":500},
@@ -42,23 +47,20 @@
 
         ],
 
-        "background": "recursos/backgrounds/forest.png",
-        "cantidad_enemigos" : 5,
-        "cantidad_frutas" : 2,
         "coordenadas_frutas" : [
-
-            {"x":425, "y":358},
+            
+            {"x":425, "y":658},
             {"x":700, "y":400},
-            {"x":425, "y":50}
+            {"x":425, "y":450}
         ],
         "coordenadas_trampas":[
-
+            
             {"x":457, "y":650},
             {"x":649, "y":750},
             {"x":247, "y":700}
         ]
         
-
+        
         
     }  
     

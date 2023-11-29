@@ -11,45 +11,11 @@ from gestor_niveles import gestionar_niveles
 pygame.init()
 reloj = pygame.time.Clock()
 
-
-
-# path = configuraciones.get('background')
-# fondo = pygame.image.load(path)
-# fondo = pygame.transform.scale(fondo,(ANCHO_VENTANA,ALTO_VENTANA))
-
-
 its_running = True
 
 jugador = Jugador(70,0,5)
 
-# enemigos = Enemigo.crear_lista_de_enemigos(3,120)
-# grupo_enemigos = pygame.sprite.Group()
-# grupo_enemigos.add(enemigos)
-
-# plataforma = Plataforma(200,500,100)
-# plataforma_dos = Plataforma(400,400,100)
-# plataforma_tres = Plataforma(600,300,100)
-
-# plataformas = pygame.sprite.Group()
-# plataformas.add(plataforma)
-# plataformas.add(plataforma_dos)
-# plataformas.add(plataforma_tres)
-
 grupo_proyectiles = pygame.sprite.Group()
-
-# fruta = Item(425,358)
-# grupo_frutas = pygame.sprite.Group()
-# fruta_dos = Item(ANCHO_VENTANA-100,400)
-# grupo_frutas.add(fruta)
-# grupo_frutas.add(fruta_dos)
-
-# trampas = pygame.sprite.Group()
-# trampa = Trampa(457, 365)
-# trampa_dos = Trampa(649, 266)
-# trampa_tres = Trampa(247, 470)
-# trampas.add(trampa)
-# trampas.add(trampa_dos)
-# trampas.add(trampa_tres)
 
 cargar_configuraciones = True
 while its_running:
@@ -146,7 +112,7 @@ while its_running:
                 enemigo.kill()
                 enemigo.actualizar()
     if enemigos_vivos == 0:
-        nivel_1_terminado = True
+        #nivel_1_terminado = True
         jugador.nivel_actual = 2
         cargar_configuraciones = True
         #print('nivel terminado')
