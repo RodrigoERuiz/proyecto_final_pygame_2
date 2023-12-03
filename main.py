@@ -6,14 +6,14 @@ import pygame
 from auxiliar import *
 from item import Item
 from trampa import Trampa
-from gestor_niveles import gestionar_niveles
+
 
 pygame.init()
 reloj = pygame.time.Clock()
 
 its_running = True
 
-jugador = Jugador(70,0,5)
+jugador = Jugador(500,200,5)
 
 grupo_proyectiles = pygame.sprite.Group()
 
@@ -49,9 +49,15 @@ while its_running:
         plataformas.add(plataforma_tres)
 
         #ENEMIGOS
-        enemigos = Enemigo.crear_lista_de_enemigos(configuraciones.get('cantidad_enemigos'),120)
+        coordenadas_enemigos = configuraciones.get('enemigo').get('coords')
+        enemigo_uno = Enemigo(coordenadas_enemigos[0].get('x'), coordenadas_enemigos[0].get('y') )
+        enemigo_dos = Enemigo(coordenadas_enemigos[1].get('x'), coordenadas_enemigos[1].get('y') )
+        enemigo_tres = Enemigo(coordenadas_enemigos[2].get('x'), coordenadas_enemigos[2].get('y') )
         grupo_enemigos = pygame.sprite.Group()
-        grupo_enemigos.add(enemigos)
+        grupo_enemigos.add(enemigo_uno)
+        grupo_enemigos.add(enemigo_dos)
+        grupo_enemigos.add(enemigo_tres)
+
         
         #FRUTAS
         coordenas_fruta = configuraciones.get('coordenadas_frutas')
@@ -77,7 +83,6 @@ while its_running:
             break
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             print(evento)
-    #print(f'vidas:{jugador.vida}')
     if jugador.esta_muerto(): 
         #hacer animacion de muerte y pantalla de tocar una tecla para reiniciar
         break
@@ -89,46 +94,40 @@ while its_running:
     teclas_presionadas = pygame.key.get_pressed()
     
     
-    jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles)
+    #jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles,grupo_trampas,grupo_enemigos)
     plataforma.update(SCREEN,jugador,plataformas)
-    for fruta in grupo_frutas:
-        fruta.update(grupo_frutas,SCREEN,jugador)
+    grupo_frutas.update(grupo_frutas,SCREEN,jugador) 
+    grupo_trampas.update(SCREEN)
+    grupo_proyectiles.update(SCREEN)
+        
+        
     
     #Enemigos   
-    enemigos_vivos = len(grupo_enemigos)        # hacer en el modulo enemigos
+    enemigos_vivos = len(grupo_enemigos)        # hacer en el modulo enemigosee
     for enemigo in grupo_enemigos:
-        
-        #print(f'enemigos vivos {enemigos_vivos}')
         enemigo.draw(SCREEN)
-        enemigo.actualizar()
-        jugador.hubo_colision(enemigo.rect)
+        enemigo.update(grupo_proyectiles,grupo_enemigos,jugador)
         for proyectil in grupo_proyectiles:
-            enemigo.detectar_disparos(grupo_proyectiles)
+            enemigo.detectar_disparos(grupo_proyectiles,grupo_enemigos)
             if proyectil.rect.colliderect(enemigo.rect) or proyectil.rect.right > ANCHO_VENTANA or proyectil.rect.left < 0:
                 proyectil.kill()
             if enemigo.esta_muerto():
                 jugador.score += 10
                 enemigo.hacer_animacion('die')
                 enemigo.kill()
-                enemigo.actualizar()
-    if enemigos_vivos == 0:
-        #nivel_1_terminado = True
-        jugador.nivel_actual = 2
-        cargar_configuraciones = True
-        #print('nivel terminado')
+                #enemigo.update()
+    # for enemigo in grupo_enemigos:
+    #     enemigo.update(grupo_proyectiles,grupo_enemigos, jugador)
+    
+    cargar_configuraciones = jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles,grupo_trampas,grupo_enemigos)
+
 
         
-    grupo_proyectiles.update()
-    grupo_proyectiles.draw(SCREEN)
+    
     SurfaceManager.draw_text(SCREEN, f'Puntuación: {str(jugador.score)}', 25, ANCHO_VENTANA // 2, 10)
     SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)
      
-    for trampa in grupo_trampas: #implementarlo en trmapa.update
-        if jugador.rect.colliderect(trampa.rect):
-            jugador.vida -= 5
-    grupo_trampas.update()
-    grupo_trampas.draw(SCREEN)   
-    
+
     pygame.display.update()
 
 pygame.quit()

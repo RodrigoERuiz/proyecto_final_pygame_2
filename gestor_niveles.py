@@ -33,9 +33,9 @@ def gestionar_niveles(jugador:Jugador, nivel_actual:int): #evaluar si hace falta
     plataformas.add(plataforma_tres)
 
     #ENEMIGOS
-    enemigos = Enemigo.crear_lista_de_enemigos(configuraciones.get('cantidad_enemigos'),120)
-    grupo_enemigos = pygame.sprite.Group()
-    grupo_enemigos.add(enemigos)
+    # enemigos = Enemigo.crear_lista_de_enemigos(configuraciones.get('cantidad_enemigos'),120)
+    # grupo_enemigos = pygame.sprite.Group()
+    # grupo_enemigos.add(enemigos)
     
     #FRUTAS
     coordenas_fruta = configuraciones.get('coordenadas_frutas')

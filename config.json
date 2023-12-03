@@ -8,7 +8,7 @@
     "nivel_1":{
         
         "background": "recursos/backgrounds/41530.jpg",
-        "cantidad_enemigos" : 3,
+        "cantidad_enemigos" : 10,
         "cantidad_frutas" : 2,
 
         "plataformas_coord":[
@@ -28,8 +28,27 @@
             {"x":457, "y":365},
             {"x":649, "y":266},
             {"x":247, "y":470}
-        ]
+        ],
+
+        "enemigo": {
+            "vidas" : 3,
+            "velocidad_min" : 3,
+            "velocidad_max" : 5,
+            "coords" : [
+                {"x":0, "y": 473},
+                {"x":649, "y": 473},
+                {"x":247, "y": 473},
+                {"x":10, "y": 473},
+                {"x":500, "y": 473},
+                {"x":69, "y": 473},
+                {"x":25, "y": 473},
+                {"x":37, "y": 473},
+                {"x":44, "y": 473},
+                {"x":60, "y": 473}
+            ]
+        }
         
+
 
         
     },

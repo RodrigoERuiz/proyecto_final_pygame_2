@@ -5,8 +5,9 @@ from auxiliar import SurfaceManager
 from proyectil import Proyectil
 
 
-class Jugador :
+class Jugador(pygame.sprite.Sprite) :
     def __init__(self, coord_x, coord_y, velocidad) -> None:
+        super().__init__()
         self.stand_r = [
                         pygame.image.load('recursos/sprites/Stand/0.png').convert_alpha(),
                         pygame.image.load('recursos/sprites/Stand/1.png').convert_alpha(),
@@ -82,13 +83,15 @@ class Jugador :
         #self.rect_ground = pygame.Rect(self.rect.centerx - ((self.rect.width / 3 - 20) / 2), self.rect.bottom - 10, self.rect.width / 3 - 20, 10)
         self.rect_ground = pygame.Rect(self.rect.left+10, self.rect.bottom-10, self.width,10)
         self.nivel_actual = 1
+        self.grupo_jugador = pygame.sprite.GroupSingle()
+        self.grupo_jugador.add(self)
         
         
     def draw(self,screen:pygame.surface):
         screen.blit(self.animacion_actual[self.frame_actual],self.rect)
         if DEBUG:
             pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)
-            pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 2)
+            #pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 2)
         
     def aplicar_gravedad(self):
         if self.is_jump or self.coord_y < ALTO_VENTANA - self.height: #aca estoy aplicando gravedad cuando el personaje salta o cuando no esta en el piso
@@ -105,7 +108,7 @@ class Jugador :
                 self.velocidad_y = 0
         
 
-    def actualizar(self,plataformas:pygame.sprite.Group, grupo_frutas:pygame.sprite.Group, lista_eventos, lista_teclas, screen: pygame.Surface, proyectiles:pygame.sprite.Group):
+    def actualizar(self,plataformas:pygame.sprite.Group, grupo_frutas:pygame.sprite.Group, lista_eventos, lista_teclas, screen: pygame.Surface, proyectiles:pygame.sprite.Group,grupo_trampas:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group):
         self.draw(screen)
         self.mover(lista_teclas,lista_eventos,proyectiles)
         self.rect.x = self.coord_x
@@ -118,7 +121,34 @@ class Jugador :
             self.image = self.stand_r[self.frame_actual]
 
         self.aplicar_gravedad()
-
+        self.controlar_daño_por_trampas(grupo_trampas)
+        self.controlar_recoleccion_frutas(grupo_frutas)
+        self.hubo_colision(grupo_enemigos)
+        if self.todos_los_enemigos_vencidos(grupo_enemigos):
+            self.nivel_actual += 1  #controlar que no se pase
+            return True
+        
+ 
+    def todos_los_enemigos_vencidos(self, grupo_enemigos:pygame.sprite.Group):
+        '''
+        Retorna True cuando todos enemigos fueron vencidos
+        '''
+        return not grupo_enemigos
+    
+        
+    def controlar_daño_por_trampas(self, grupo_trampas:pygame.sprite.Group):
+        for trampa in grupo_trampas:
+            if self.rect.colliderect(trampa.rect):
+                self.vida -= 2
+                print('colisione con una trampa')
+                
+    def controlar_recoleccion_frutas(self, grupo_frutas:pygame.sprite.Group):
+        for fruta in grupo_frutas:
+            if self.rect.colliderect(fruta.rect):
+                if self.vida < 80:
+                    self.vida = min(self.vida + 20, 100)  # Aumentar en 20 sin pasar de 100
+                print('Colisioné con una fruta')
+            
         
         
     def mover(self, lista_teclas: list,lista_eventos, grupo_proyectiles:pygame.sprite.Group ):
@@ -180,19 +210,41 @@ class Jugador :
             
 
         
-    def hubo_colision(self, rect: pygame.Rect):
+    def hubo_colision(self, grupo_enemigos:pygame.sprite.Group):
+        '''
+        Si el jugador entra en cotacto con cualquier enemigo pierde diez punto de vida
+        '''
         tiempo_actual = pygame.time.get_ticks()
         
         if tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
-            if self.rect.colliderect(rect) and not self.hubo_colision_previa:
-                if DEBUG:
-                    print("Hubo colisión")
-                    print(f'Te quedan: {self.vida} puntos de vida')
-                self.vida -= 10
-                self.hubo_colision_previa = True
-                self.tiempo_ultima_colision = tiempo_actual
+            for enemigo in grupo_enemigos:
+                if self.rect.colliderect(enemigo.rect) and not self.hubo_colision_previa:
+                    if DEBUG:
+                        print("Hubo colisión")
+                        print(f'Te quedan: {self.vida} puntos de vida')
+                    self.vida -= 10
+                    self.hubo_colision_previa = True
+                    self.tiempo_ultima_colision = tiempo_actual
         else:
             self.hubo_colision_previa = False
+            
+        # def hubo_colision(self, rect: pygame.Rect):
+        # '''
+        # Si el jugador entra en cotacto con cualquier enemigo pierde diez punto de vida
+        # '''
+        # tiempo_actual = pygame.time.get_ticks()
+        
+        # if tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
+        #     if self.rect.colliderect(rect) and not self.hubo_colision_previa:
+        #         if DEBUG:
+        #             print("Hubo colisión")
+        #             print(f'Te quedan: {self.vida} puntos de vida')
+        #         self.vida -= 10
+        #         self.hubo_colision_previa = True
+        #         self.tiempo_ultima_colision = tiempo_actual
+        # else:
+        #     self.hubo_colision_previa = False
+            
             
     def disparar(self):
         proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)

@@ -7,7 +7,7 @@ from proyectil import *
 
 class Enemigo(pygame.sprite.Sprite):
     
-    def __init__(self, coord_x, coord_y, velocidad):
+    def __init__(self,coord_x,coord_y):
         super().__init__()
         self.stand_r = [
                         pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_000.png'),
@@ -71,23 +71,33 @@ class Enemigo(pygame.sprite.Sprite):
         self.die_r = SurfaceManager.preparar_imagen(self.die_r,120,120)
         self.die_l = SurfaceManager.girar_sprites(self.die_r)
         
+        self.configs = SurfaceManager.get_config('config.json').get('nivel_1').get('enemigo')
         self.coord_x = coord_x
         self.coord_y = coord_y
+        # self.coord_x = self.configs.get('coords')[0].get('x')
+        # self.coord_y = self.configs.get('coords')[0].get('y')
         self.frame_actual = 0
         self.animacion_actual = self.stand_l
         self.image = self.animacion_actual[self.frame_actual]
         #self.image = pygame.transform.scale(self.image,(80,80)) #borrar si queda mal
         self.rect = self.image.get_rect()
-        self.velocidad  = velocidad
+        self.rect.y = self.coord_y #verficar si conviene dejarlo afuera
+        self.velocidad_min  = self.configs.get('velocidad_min')
+        self.velocidad_max = self.configs.get('velocidad_max')
+        self.velocidad = random.randint(self.velocidad_min,self.velocidad_max)
         self.height = self.image.get_height() 
         self.width = self.image.get_width()
         self.direccion = 1  # 1 para derecha, -1 para izquierda
         self.velocidad_y = -1
         self.frame_tiempo_anterior = pygame.time.get_ticks()
         self.frame_tiempo_intervalo = 30
-        self.lives = 3
-        self.rect.y = self.coord_y #verficar si conviene dejarlo afuera
+        self.lives = self.configs.get('vidas')
+        self.coordenadas = self.configs.get("coords")
         
+        
+        
+        
+    
     def draw(self,screen:pygame.surface):
         screen.blit(self.animacion_actual[self.frame_actual],self.rect)
         if DEBUG:
@@ -98,10 +108,6 @@ class Enemigo(pygame.sprite.Sprite):
     def esta_muerto(self):
         return self.lives == 0
         
-    def detectar_disparos(self, disparos:pygame.sprite.Group):    #ver si conviene hacerlo con el grupo de sprites
-        for disparo in disparos:
-            if self.rect.colliderect(disparo.rect):
-                self.lives -= 1
                 
     def hacer_animacion(self, animacion: str):
         if animacion == 'die':
@@ -148,6 +154,7 @@ class Enemigo(pygame.sprite.Sprite):
                 self.animacion_actual = self.attack_r
         # Mover en la dirección correspondiente
         self.rect.x += self.velocidad * self.direccion
+        self.coord_x = self.rect.x
         
         
     def animar(self):
@@ -161,18 +168,44 @@ class Enemigo(pygame.sprite.Sprite):
         #self.rect.y = self.coord_y #coloca a los enemigos en el suelo
 
             
-    def actualizar(self):
+    def update(self,grupo_proyectiles:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group, jugador:Jugador):
+        
         self.controlar_limites_pantalla()
         self.mover()
+        self.coord_x = self.rect.x  # Actualizar la coordenada x
+        self.coord_y = self.rect.y  # Actualizar la coordenada y
+
+        #grupo_enemigos.draw(SCREEN)
+        for enemigo in grupo_enemigos:
+            enemigo.detectar_disparos(grupo_proyectiles,grupo_enemigos)
+        for enemigo in grupo_enemigos:
+            if enemigo.esta_muerto():
+                jugador.score += 10
+                enemigo.hacer_animacion('die')
+                enemigo.kill()
+                
 
         
-        
+    def detectar_disparos(self, disparos:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group):    #ver si conviene hacerlo con el grupo de sprites
+        for enemigo in grupo_enemigos:
+            
+            for disparo in disparos:
+                if enemigo.rect.colliderect(disparo.rect) or disparo.rect.right > ANCHO_VENTANA or disparo.rect.left < 0:
+                    enemigo.lives -= 1
+                    disparo.kill()
+                
+                
+
         
     @staticmethod
-    def crear_lista_de_enemigos(n,height):
+    def crear_lista_de_enemigos(n,height,lista_coord:list[dict]):
         lista_retorno = []
         
         for i in range(n):
-            enemigo = Enemigo(random.randint(0,ANCHO_VENTANA),ALTO_VENTANA-height,random.randint(1,5))
+            #enemigo = Enemigo(random.randint(0,ANCHO_VENTANA),ALTO_VENTANA-height)
+            enemigo = Enemigo(lista_coord[i].get('x'),lista_coord[i].get('y'))
+            print(f'x: {lista_coord[i].get("x")} Y: {lista_coord[i].get("y")} ')
             lista_retorno.append(enemigo)
         return lista_retorno
+
+        

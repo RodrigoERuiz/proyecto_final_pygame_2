@@ -18,5 +18,10 @@ class Proyectil(pygame.sprite.Sprite):
         if direction == -1:  # Si el jugador está mirando hacia la izquierda, voltear la imagen
             self.image = pygame.transform.flip(self.image, True, False)
 
-    def update(self):
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+    def update(self,screen):
         self.rect.x += self.speed * self.direction
+        self.draw(screen)

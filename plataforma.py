@@ -24,7 +24,7 @@ class Plataforma(pygame.sprite.Sprite):
             pygame.draw.rect(screen, (0, 255, 0), self.rect, 2)
             pygame.draw.rect(screen, (0, 0, 255), self.top_collision_rect, 2)
     
-    def update(self,screen:pygame.Surface, jugador:Jugador, plataformas:pygame.sprite.Group):
+    def update(self,screen:pygame.Surface, jugador:Jugador, plataformas:pygame.sprite.Group): #puedo mover las plataformas en caso que el jugador este en el nivel dos
         self.draw(screen)
         for plataforma in plataformas:
             plataforma.draw(screen)
