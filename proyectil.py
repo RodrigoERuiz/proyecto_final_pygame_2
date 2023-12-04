@@ -1,4 +1,5 @@
-
+from enemigo import Enemigo
+from constantes import *
 import pygame
 
 class Proyectil(pygame.sprite.Sprite):
@@ -6,7 +7,6 @@ class Proyectil(pygame.sprite.Sprite):
         super().__init__()
 
         self.image = pygame.Surface((10, 10))  # Tamaño del proyectil
-        #self.image.fill((255, 0, 0))  # Color del proyectil
         self.image = pygame.image.load('recursos/sprites/weapons/axe.png')
         self.image = pygame.transform.scale(self.image, (40,20))
         self.rect = self.image.get_rect()
@@ -22,6 +22,29 @@ class Proyectil(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 
-    def update(self,screen):
+    def update(self,screen, enemigos:pygame.sprite.Group, lista_proyectiles:pygame.sprite.Group, jugador, plataformas:pygame.sprite.Group):
         self.rect.x += self.speed * self.direction
         self.draw(screen)
+        
+        if jugador.rect.colliderect(self.rect):
+            if jugador.vida > 0:
+                jugador.vida -= 1
+                # if self in lista_proyectiles:
+                #     self.kill()
+                
+                
+        if self.rect.x < 0 or self.rect.x > ANCHO_VENTANA:
+            if self in lista_proyectiles:
+                self.kill()
+
+        for plataforma in plataformas:
+            if self.rect.colliderect(plataforma.rect) and self in lista_proyectiles:
+                if self in lista_proyectiles:
+                    self.kill()
+
+        for proyectil in lista_proyectiles:
+            if proyectil != self and self.rect.colliderect(proyectil.rect):
+                if self in lista_proyectiles:
+                    self.kill()
+
+

@@ -228,23 +228,6 @@ class Jugador(pygame.sprite.Sprite) :
         else:
             self.hubo_colision_previa = False
             
-        # def hubo_colision(self, rect: pygame.Rect):
-        # '''
-        # Si el jugador entra en cotacto con cualquier enemigo pierde diez punto de vida
-        # '''
-        # tiempo_actual = pygame.time.get_ticks()
-        
-        # if tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
-        #     if self.rect.colliderect(rect) and not self.hubo_colision_previa:
-        #         if DEBUG:
-        #             print("Hubo colisión")
-        #             print(f'Te quedan: {self.vida} puntos de vida')
-        #         self.vida -= 10
-        #         self.hubo_colision_previa = True
-        #         self.tiempo_ultima_colision = tiempo_actual
-        # else:
-        #     self.hubo_colision_previa = False
-            
             
     def disparar(self):
         proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
@@ -269,11 +252,3 @@ class Jugador(pygame.sprite.Sprite) :
     def esta_muerto(self)->bool:
         return self.vida <= 0
     
-
-            
-
-            
-            #SurfaceManager.game_over()
-        
-
-#(69, 521) x,y piso

@@ -93,37 +93,25 @@ while its_running:
 
     teclas_presionadas = pygame.key.get_pressed()
     
-    
-    #jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles,grupo_trampas,grupo_enemigos)
     plataforma.update(SCREEN,jugador,plataformas)
     grupo_frutas.update(grupo_frutas,SCREEN,jugador) 
     grupo_trampas.update(SCREEN)
-    grupo_proyectiles.update(SCREEN)
-        
-        
-    
+    grupo_proyectiles.update(SCREEN, grupo_enemigos, grupo_proyectiles, jugador, plataformas)
+
     #Enemigos   
     enemigos_vivos = len(grupo_enemigos)        
     for enemigo in grupo_enemigos:
         enemigo.draw(SCREEN)
-        enemigo.update(grupo_proyectiles,grupo_enemigos,jugador)
-        for proyectil in grupo_proyectiles:
-            enemigo.detectar_disparos(grupo_proyectiles,grupo_enemigos)
-            if proyectil.rect.colliderect(enemigo.rect) or proyectil.rect.right > ANCHO_VENTANA or proyectil.rect.left < 0:
-                proyectil.kill()
-            if enemigo.esta_muerto():
-                jugador.score += 10
-                enemigo.hacer_animacion('die')
-                enemigo.kill()
-                #enemigo.update()
-    # for enemigo in grupo_enemigos:
-    #     enemigo.update(grupo_proyectiles,grupo_enemigos, jugador)
-    
+        enemigo.update(grupo_proyectiles,grupo_enemigos)
+
+        if enemigo.esta_muerto():
+            jugador.score += 10
+            enemigo.hacer_animacion('die')
+            enemigo.kill()
+
+  
     cargar_configuraciones = jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles,grupo_trampas,grupo_enemigos)
 
-
-        
-    
     SurfaceManager.draw_text(SCREEN, f'Puntuación: {str(jugador.score)}', 25, ANCHO_VENTANA // 2, 10)
     SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)
      

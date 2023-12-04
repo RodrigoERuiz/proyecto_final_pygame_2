@@ -1,7 +1,7 @@
 import pygame
 from auxiliar import SurfaceManager
 from constantes import *
-from jugador import Jugador
+#from jugador import Jugador
 import random
 from proyectil import *
 
@@ -168,7 +168,7 @@ class Enemigo(pygame.sprite.Sprite):
         #self.rect.y = self.coord_y #coloca a los enemigos en el suelo
 
             
-    def update(self,grupo_proyectiles:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group, jugador:Jugador):
+    def update(self,grupo_proyectiles:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group): #saque al jugador que estaba pasado como parametro
         
         self.controlar_limites_pantalla()
         self.mover()
@@ -180,7 +180,7 @@ class Enemigo(pygame.sprite.Sprite):
             enemigo.detectar_disparos(grupo_proyectiles,grupo_enemigos)
         for enemigo in grupo_enemigos:
             if enemigo.esta_muerto():
-                jugador.score += 10
+                #jugador.score += 10
                 enemigo.hacer_animacion('die')
                 enemigo.kill()
                 
