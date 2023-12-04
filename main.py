@@ -103,7 +103,7 @@ while its_running:
         
     
     #Enemigos   
-    enemigos_vivos = len(grupo_enemigos)        # hacer en el modulo enemigosee
+    enemigos_vivos = len(grupo_enemigos)        
     for enemigo in grupo_enemigos:
         enemigo.draw(SCREEN)
         enemigo.update(grupo_proyectiles,grupo_enemigos,jugador)

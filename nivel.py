@@ -11,7 +11,11 @@ class Nivel:
     def update(self, lista_eventos):
         pass
     
-    
-    
-    
-    def
+
+    def actualizar_pantalla(self):
+        self.pantalla.blit(self.background)
+        
+        for plataforma in self.plataformas:
+            plataforma.draw(self.pantalla)
+            
+        self.jugador.update(self.pantalla, self.plataformas)
