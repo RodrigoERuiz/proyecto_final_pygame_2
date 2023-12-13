@@ -40,21 +40,12 @@ while its_running:
         fondo = pygame.image.load(path)
         fondo = pygame.transform.scale(fondo,(ANCHO_VENTANA,ALTO_VENTANA))
 
-        #PLATAFORMAS
-        # coordenadas_plataformas = configuraciones.get('plataformas_coord')
-        # plataforma = Plataforma(coordenadas_plataformas[0].get('x'),coordenadas_plataformas[0].get('y'),100)
-        # plataforma_dos = Plataforma(coordenadas_plataformas[1].get('x'),coordenadas_plataformas[1].get('y'),100)
-        # plataforma_tres = Plataforma(coordenadas_plataformas[2].get('x'),coordenadas_plataformas[2].get('y'),100)
-
         plataformas = pygame.sprite.Group()
-        # plataformas.add(plataforma)
-        # plataformas.add(plataforma_dos)
-        # plataformas.add(plataforma_tres)
         plataformas.add(Plataforma.crear_lista_plataformas(configuraciones.get('plataformas_coord'),100))
 
         #ENEMIGOS
         grupo_enemigos = pygame.sprite.Group()
-        grupo_enemigos.add(Enemigo.crear_lista_de_enemigos(configuraciones.get('cantidad_enemigos'),12,configuraciones.get('enemigo').get('coords')))
+        grupo_enemigos.add(Enemigo.crear_lista_de_enemigos(configuraciones.get('cantidad_enemigos'),12,configuraciones.get('enemigo').get('coords'),jugador.nivel_actual))
 
         
         #FRUTAS
