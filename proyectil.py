@@ -1,4 +1,4 @@
-from enemigo import Enemigo
+
 from constantes import *
 import pygame
 
@@ -22,29 +22,32 @@ class Proyectil(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 
-    def update(self,screen, enemigos:pygame.sprite.Group, lista_proyectiles:pygame.sprite.Group, jugador, plataformas:pygame.sprite.Group):
+    def update(self,screen, enemigos:pygame.sprite.Group, lista_proyectiles_enemigos:pygame.sprite.Group, jugador, plataformas:pygame.sprite.Group,lista_proyectiles_jugador:pygame.sprite.Group):
         self.rect.x += self.speed * self.direction
         self.draw(screen)
         
-        if jugador.rect.colliderect(self.rect):
-            if jugador.vida > 0:
-                jugador.vida -= 1
-                # if self in lista_proyectiles:
-                #     self.kill()
-                
-                
-        if self.rect.x < 0 or self.rect.x > ANCHO_VENTANA:
-            if self in lista_proyectiles:
+        #if jugador.rect.colliderect(lista_proyectiles_enemigos.rect):#separar entre proyectiles del jugador y proyectiles del enemigo sino cuando el jugador dispara tambien le saca vida a el
+        if pygame.sprite.groupcollide(lista_proyectiles_enemigos, [jugador], True, False) or pygame.sprite.groupcollide(lista_proyectiles_jugador, enemigos, True, True):
+            # if jugador.vida > 0:
+            #     jugador.vida -= 1
+                #if self in lista_proyectiles:
                 self.kill()
 
+
+                
+                
+        # if self.rect.x < 0 or self.rect.x > ANCHO_VENTANA:
+        #     if self in lista_proyectiles_jugador:
+        #         self.kill()
+
         for plataforma in plataformas:
-            if self.rect.colliderect(plataforma.rect) and self in lista_proyectiles:
-                if self in lista_proyectiles:
+            if self.rect.colliderect(plataforma.rect) and self in lista_proyectiles_jugador:
+                if self in lista_proyectiles_jugador:
                     self.kill()
 
-        for proyectil in lista_proyectiles:
-            if proyectil != self and self.rect.colliderect(proyectil.rect):
-                if self in lista_proyectiles:
-                    self.kill()
+        # for proyectil in lista_proyectiles_jugador:
+        #     if proyectil != self and self.rect.colliderect(proyectil.rect):
+        #         if self in lista_proyectiles_jugador:
+        #             self.kill()
 
 

@@ -75,7 +75,7 @@ class Jugador(pygame.sprite.Sprite) :
         self.rect = self.image.get_rect()
         self.esta_cayendo = False
         self.hubo_colision_previa = False
-        self.tiempo_entre_colisiones = 1000  # 1000 milisegundos (1 segundo)
+        self.tiempo_entre_colisiones = 1000 
         self.tiempo_ultima_colision = 0 
         self.vida = self.configs.get('vida')
         self.en_suelo = False
@@ -85,6 +85,7 @@ class Jugador(pygame.sprite.Sprite) :
         self.nivel_actual = 1
         self.grupo_jugador = pygame.sprite.GroupSingle()
         self.grupo_jugador.add(self)
+        self.grupo_proyectiles_jugador = pygame.sprite.Group()
         
         
     def draw(self,screen:pygame.surface):
@@ -145,13 +146,14 @@ class Jugador(pygame.sprite.Sprite) :
     def controlar_recoleccion_frutas(self, grupo_frutas:pygame.sprite.Group):
         for fruta in grupo_frutas:
             if self.rect.colliderect(fruta.rect):
+                self.score += 10
                 if self.vida < 80:
                     self.vida = min(self.vida + 20, 100)  # Aumentar en 20 sin pasar de 100
                 print('Colisioné con una fruta')
             
         
         
-    def mover(self, lista_teclas: list,lista_eventos, grupo_proyectiles:pygame.sprite.Group ):
+    def mover(self, lista_teclas: list,lista_eventos, grupo_proyectiles_jugador:pygame.sprite.Group ):
             #CORRER DERECHA
         if lista_teclas[pygame.K_d] and lista_teclas[pygame.K_LSHIFT]  and not self.is_jump:
             self.animacion_actual = self.run_r
@@ -197,7 +199,7 @@ class Jugador(pygame.sprite.Sprite) :
             if  evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_e and not self.is_jump:
                     proyectil = self.disparar()
-                    grupo_proyectiles.add(proyectil)
+                    grupo_proyectiles_jugador.add(proyectil)
             
      
     def controlar_limites_pantalla(self):

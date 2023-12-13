@@ -93,6 +93,8 @@ class Enemigo(pygame.sprite.Sprite):
         self.frame_tiempo_intervalo = 30
         self.lives = self.configs.get('vidas')
         self.coordenadas = self.configs.get("coords")
+        self.grupo_proyectiles_enemigo = pygame.sprite.Group()
+        self.proyectiles_impactados = set()
         
         
         
@@ -168,7 +170,7 @@ class Enemigo(pygame.sprite.Sprite):
         #self.rect.y = self.coord_y #coloca a los enemigos en el suelo
 
             
-    def update(self,grupo_proyectiles:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group): #saque al jugador que estaba pasado como parametro
+    def update(self,grupo_proyectiles:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group,jugador): #saque al jugador que estaba pasado como parametro
         
         self.controlar_limites_pantalla()
         self.mover()
@@ -177,25 +179,34 @@ class Enemigo(pygame.sprite.Sprite):
 
         #grupo_enemigos.draw(SCREEN)
         for enemigo in grupo_enemigos:
-            enemigo.detectar_disparos(grupo_proyectiles,grupo_enemigos)
-        for enemigo in grupo_enemigos:
-            if enemigo.esta_muerto():
-                #jugador.score += 10
-                enemigo.hacer_animacion('die')
-                enemigo.kill()
+            enemigo.detectar_disparos(grupo_enemigos,jugador)
+            # if enemigo.esta_muerto():
+            #     #jugador.score += 10
+            #     enemigo.hacer_animacion('die')
+            #     enemigo.kill()
+            #     enemigo.reiniciar_impactos()
                 
 
         
-    def detectar_disparos(self, disparos:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group):    #ver si conviene hacerlo con el grupo de sprites
+    def detectar_disparos(self,grupo_enemigos:pygame.sprite.Group,jugador):    #ver si conviene hacerlo con el grupo de sprites
         for enemigo in grupo_enemigos:
-            
-            for disparo in disparos:
-                if enemigo.rect.colliderect(disparo.rect) or disparo.rect.right > ANCHO_VENTANA or disparo.rect.left < 0:
+            for proyectil in jugador.grupo_proyectiles_jugador:
+                if enemigo.rect.colliderect(proyectil.rect) and proyectil not in self.proyectiles_impactados:
                     enemigo.lives -= 1
-                    disparo.kill()
+                    self.proyectiles_impactados.add(proyectil)
+                    #proyectil.kill()
+                if proyectil.rect.right > ANCHO_VENTANA or proyectil.rect.left < 0:
+                    proyectil.kill()
                 
+    # def detectar_disparos(self, grupo_proyectiles, jugador):
+    #     for proyectil in grupo_proyectiles:
+    #         if proyectil not in self.proyectiles_impactados and self.rect.colliderect(proyectil.rect):
+    #             self.lives -= 1
+    #             self.proyectiles_impactados.add(proyectil)
+    #             proyectil.kill()
                 
-
+    def reiniciar_impactos(self):
+        self.proyectiles_impactados = set()
         
     @staticmethod
     def crear_lista_de_enemigos(n,height,lista_coord:list[dict]):

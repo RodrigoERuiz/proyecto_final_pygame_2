@@ -44,11 +44,20 @@ class Plataforma(pygame.sprite.Sprite):
             self.velocidad_y *= -1
 
         
+    
+    # def crear_lista_plataformas(n:int,x:int,y:int,ancho:int):
+    #     lista_retorno = []
+    #     for i in range(n):
+    #         plataforma = Plataforma(x,y,ancho)
+    #         lista_retorno.append(plataforma)
+    #     return lista_retorno
+    
     @staticmethod
-    def crear_lista_plataformas(n:int,x:int,y:int,ancho:int):
+    def crear_lista_plataformas(lista_coordenadas,w): #Revisar por que no le estaba pasando el height como parámetro
         lista_retorno = []
-        for i in range(n):
-            plataforma = Plataforma(x,y,ancho)
-            lista_retorno.append(plataforma)
+        for par_de_coordenadas in lista_coordenadas:
+            plaforma_actual = Plataforma(par_de_coordenadas.get('x'), par_de_coordenadas.get('y'), w)
+            lista_retorno.append(plaforma_actual)
         return lista_retorno
+            
     

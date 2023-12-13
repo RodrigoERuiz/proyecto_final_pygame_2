@@ -71,3 +71,12 @@ class SurfaceManager:
             print("Error: Archivo no encontrado")
             return None
         
+class funcionesAuxiliares():
+    @staticmethod
+    def verificar_transicion_nivel(grupo_enemigos:pygame.sprite.Group,jugador):
+        if not grupo_enemigos:
+            jugador.nivel_actual += 1
+            return True
+        
+            
+            
