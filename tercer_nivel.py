@@ -7,10 +7,10 @@ from auxiliar import *
 from item import Item
 from trampa import Trampa
 
-def correr_nivel_2():
+def correr_nivel_3():
     pygame.init()
     pygame.mixer.init()
-    pygame.mixer.music.load("C:/Users/RODRIGO/Desktop/pygame desde cero/recursos/sounds/ambiente/ambiente.wav")
+    pygame.mixer.music.load("recursos/sounds/ambiente/Prórroga de Tiempo A.ogg")
     pygame.mixer.music.set_volume(0.2)
     pygame.mixer.music.play(-1)
     reloj = pygame.time.Clock()
@@ -101,5 +101,3 @@ def correr_nivel_2():
 
     pygame.quit()
     
-    # if __name__ == "__main__":
-    #     correr_juego()

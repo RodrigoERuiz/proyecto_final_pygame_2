@@ -64,6 +64,7 @@ def correr_nivel_1():
             elif evento.type == pygame.MOUSEBUTTONDOWN:
                 print(evento)
         if jugador.esta_muerto() or len(grupo_enemigos) == 0: 
+            pygame.mixer_music.stop()
             from GUI_main import main_menu 
             main_menu()
         

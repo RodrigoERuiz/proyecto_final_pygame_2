@@ -134,9 +134,9 @@ class Jugador(pygame.sprite.Sprite) :
         self.hubo_colision(grupo_enemigos)
         if self.vida <= 30:
             self.sonido_latidos.play()
-        if self.todos_los_enemigos_vencidos(grupo_enemigos):
-            self.nivel_actual += 1  #controlar que no se pase
-            return True
+        # if self.todos_los_enemigos_vencidos(grupo_enemigos):
+        #     self.nivel_actual += 1  #controlar que no se pase
+        #     return True
         
  
     def todos_los_enemigos_vencidos(self, grupo_enemigos:pygame.sprite.Group):

@@ -7,11 +7,9 @@ pygame.init()
 SCREEN = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Menu")
 
-# Escalamos la imagen del fondo a las dimensiones de la ventana del juego
 BG = pygame.image.load("assets/Background.png")
 BG = pygame.transform.scale(BG, (ANCHO_VENTANA, ALTO_VENTANA))
 
-# Se ajustan las fuentes para el texto
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 

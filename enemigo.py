@@ -58,7 +58,8 @@ class Enemigo(pygame.sprite.Sprite):
         self.velocidad_y = -1
         self.frame_tiempo_anterior = pygame.time.get_ticks()
         self.frame_tiempo_intervalo = 30
-        self.lives = self.configs.get('vidas')
+        #self.lives = self.configs.get('vidas')
+        self.lives = 3 #BORRAR SI NO FUNCIONA
         self.coordenadas = self.configs.get("coords")
         self.grupo_proyectiles_enemigo = pygame.sprite.Group()
         self.proyectiles_impactados = set()
@@ -90,11 +91,11 @@ class Enemigo(pygame.sprite.Sprite):
     
     
     def aplicar_gravedad(self):
-        if self.coord_y < ALTO_VENTANA - self.height: #aca estoy aplicando gravedad cuando el personaje salta o cuando no esta en el piso
+        if self.coord_y < ALTO_VENTANA - self.height: 
             self.coord_y -= self.velocidad_y
             self.velocidad_y -= 1  
             
-            #Esto controla que el jugador no se vaya por abajo de la pantalla ARREGLAR INTEGRAR A COTROLAR_LIMITES_PANTALLA
+            
             if self.coord_y >= ALTO_VENTANA - self.height:  
                 self.coord_y = ALTO_VENTANA - self.height
                 self.velocidad_y = 0

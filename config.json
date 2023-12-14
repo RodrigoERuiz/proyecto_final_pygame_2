@@ -131,7 +131,7 @@
             {"x":794, "y":440}
         ],
         "enemigo": {
-            "vidas" : 10,
+            "vidas" : 8,
             "velocidad_min" : 5,
             "velocidad_max" : 7,
             "coords" : [
