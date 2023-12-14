@@ -6,7 +6,7 @@ from proyectil import Proyectil
 
 
 class Jugador(pygame.sprite.Sprite) :
-    def __init__(self, coord_x, coord_y, velocidad) -> None:
+    def __init__(self, coord_x, coord_y, velocidad, nivel_actual) -> None:
         super().__init__()
         self.stand_r = [
                         pygame.image.load('recursos/sprites/Stand/0.png').convert_alpha(),
@@ -82,7 +82,7 @@ class Jugador(pygame.sprite.Sprite) :
         self.score = 0
         #self.rect_ground = pygame.Rect(self.rect.centerx - ((self.rect.width / 3 - 20) / 2), self.rect.bottom - 10, self.rect.width / 3 - 20, 10)
         self.rect_ground = pygame.Rect(self.rect.left+10, self.rect.bottom-10, self.width,10)
-        self.nivel_actual = 1
+        self.nivel_actual = nivel_actual
         self.grupo_jugador = pygame.sprite.GroupSingle()
         self.grupo_jugador.add(self)
         self.grupo_proyectiles_jugador = pygame.sprite.Group()
