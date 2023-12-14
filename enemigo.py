@@ -109,7 +109,7 @@ class Enemigo(pygame.sprite.Sprite):
             self.coord_x = 0
             
                 
-    def mover(self): #pasarle al jugador por parametro y en caso que este en nivel 2 o mas dotarlos de mas habilidades 
+    def mover(self): 
         self.animar()
         tiempo = pygame.time.get_ticks()
         if self.rect.right >= ANCHO_VENTANA:
@@ -126,7 +126,7 @@ class Enemigo(pygame.sprite.Sprite):
                 self.animacion_actual = self.walk_r
             else:
                 self.animacion_actual = self.attack_r
-        # Mover en la dirección correspondiente
+        
         self.rect.x += self.velocidad * self.direccion
         self.coord_x = self.rect.x
         
@@ -144,40 +144,25 @@ class Enemigo(pygame.sprite.Sprite):
             self.image = self.stand_r[self.frame_actual]
                 
         self.aplicar_gravedad()
-        #self.rect.y = self.coord_y #coloca a los enemigos en el suelo
+        
 
             
     def update(self,grupo_proyectiles:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group,jugador): #saque al jugador que estaba pasado como parametro
         
         self.controlar_limites_pantalla()
         self.mover()
-        self.coord_x = self.rect.x  # Actualizar la coordenada x
-        self.coord_y = self.rect.y  # Actualizar la coordenada y
+        self.coord_x = self.rect.x  
+        self.coord_y = self.rect.y  
 
         #grupo_enemigos.draw(SCREEN)
         for enemigo in grupo_enemigos:
-            #enemigo.detectar_disparos(grupo_enemigos,jugador)
             enemigo.detectar_disparos(jugador.grupo_proyectiles_jugador)
-            # if enemigo.esta_muerto():
-            #     #jugador.score += 10
-            #     enemigo.hacer_animacion('die')
-            #     enemigo.kill()
-            #     enemigo.reiniciar_impactos()
-                
 
-        
-    # def detectar_disparos(self,grupo_enemigos:pygame.sprite.Group,jugador):    #ver si conviene hacerlo con el grupo de sprites
-    #     for enemigo in grupo_enemigos:
-    #         for proyectil in jugador.grupo_proyectiles_jugador:
-    #             if enemigo.rect.colliderect(proyectil.rect) and proyectil not in self.proyectiles_impactados:
-    #                 enemigo.lives -= 1
-    #                 self.proyectiles_impactados.add(proyectil)
     
     def detectar_disparos(self, grupo_proyectiles_jugador: pygame.sprite.Group):
         proyectiles_impactados = pygame.sprite.groupcollide(grupo_proyectiles_jugador, [self], True, False)
         for proyectil, enemigos_alcanzados in proyectiles_impactados.items():
             for enemigo in enemigos_alcanzados:
-                
                 proyectil.kill()
                 enemigo.lives -= 1
 

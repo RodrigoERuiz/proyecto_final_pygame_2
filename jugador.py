@@ -99,7 +99,7 @@ class Jugador(pygame.sprite.Sprite) :
         screen.blit(self.animacion_actual[self.frame_actual],self.rect)
         if DEBUG:
             pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)
-            #pygame.draw.rect(screen, (0, 255, 0), self.rect_ground, 2)
+           
         
     def aplicar_gravedad(self):
         if self.is_jump or self.coord_y < ALTO_VENTANA - self.height: #aca estoy aplicando gravedad cuando el personaje salta o cuando no esta en el piso
@@ -134,17 +134,7 @@ class Jugador(pygame.sprite.Sprite) :
         self.hubo_colision(grupo_enemigos)
         if self.vida <= 30:
             self.sonido_latidos.play()
-        # if self.todos_los_enemigos_vencidos(grupo_enemigos):
-        #     self.nivel_actual += 1  #controlar que no se pase
-        #     return True
-        
- 
-    def todos_los_enemigos_vencidos(self, grupo_enemigos:pygame.sprite.Group):
-        '''
-        Retorna True cuando todos enemigos fueron vencidos
-        '''
-        return not grupo_enemigos
-    
+   
         
     def controlar_daño_por_trampas(self, grupo_trampas:pygame.sprite.Group):
         for trampa in grupo_trampas:

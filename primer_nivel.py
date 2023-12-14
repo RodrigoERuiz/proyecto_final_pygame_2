@@ -79,17 +79,10 @@ def correr_nivel_1():
         grupo_proyectiles_enemigo.update(SCREEN, grupo_enemigos, grupo_proyectiles_jugador, jugador, plataformas,grupo_proyectiles_jugador)
         
 
-        #Enemigos   
-        enemigos_vivos = len(grupo_enemigos)        
+        #Enemigos         
         for enemigo in grupo_enemigos:
-            #print(f'vida enemigo: {enemigo.lives}')
             enemigo.draw(SCREEN)
             enemigo.update(grupo_proyectiles_jugador,grupo_enemigos,jugador)
-
-            # if enemigo.esta_muerto():
-            #     jugador.score += 10
-            #     enemigo.hacer_animacion('die')
-            #     enemigo.kill()
 
     
         jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles_jugador,grupo_trampas,grupo_enemigos)
@@ -103,5 +96,3 @@ def correr_nivel_1():
 
     pygame.quit()
     
-    # if __name__ == "__main__":
-    #     correr_juego()

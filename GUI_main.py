@@ -13,60 +13,7 @@ BG = pygame.transform.scale(BG, (ANCHO_VENTANA, ALTO_VENTANA))
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
-#def play():
-    while True:
-        PLAY_MOUSE_POS = pygame.mouse.get_pos()
-        SCREEN.fill("black")
-
-        # Se ajusta la posición del texto "PLAY screen"
-        PLAY_TEXT = get_font(30).render("This is the PLAY screen.", True, "White")
-        PLAY_RECT = PLAY_TEXT.get_rect(center=(ANCHO_VENTANA // 2, ALTO_VENTANA // 4))
-        SCREEN.blit(PLAY_TEXT, PLAY_RECT)
-
-        # Se ajusta la posición del botón BACK
-        PLAY_BACK = Button(image=None, pos=(ANCHO_VENTANA // 2, ALTO_VENTANA // 1.3), 
-                           text_input="BACK", font=get_font(40), base_color="White", hovering_color="Green")
-
-        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-        PLAY_BACK.update(SCREEN)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    main_menu()
-
-        pygame.display.update()
     
-#def options():
-    while True:
-        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
-
-        SCREEN.fill("white")
-
-        OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
-        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
-
-        OPTIONS_BACK = Button(image=None, pos=(640, 460), 
-                            text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
-
-        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-        OPTIONS_BACK.update(SCREEN)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos
-                print(f"Coordenadas del click: x={x}, y={y}")
-                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
-
-        pygame.display.update()
 
 def main_menu():
     while True:
