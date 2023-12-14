@@ -9,7 +9,12 @@ from trampa import Trampa
 
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("C:/Users/RODRIGO/Desktop/pygame desde cero/recursos/sounds/ambiente/ambiente.wav")
+pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.play(-1)
 reloj = pygame.time.Clock()
+
 
 its_running = True
 
@@ -23,9 +28,8 @@ cargar_configuraciones = True
 while its_running:
     
     #nivel_actual = jugador.nivel_actual
-    
     ##################################################################################
-    print(f'NIVEL ACTUAL DEL JUGADOR: {jugador.nivel_actual}')
+    #print(f'NIVEL ACTUAL DEL JUGADOR: {jugador.nivel_actual}')
     if cargar_configuraciones:
         #print("entró a cargar las configuraciones")
         match(jugador.nivel_actual):
@@ -36,8 +40,8 @@ while its_running:
                 configuraciones = SurfaceManager.get_config('config.json').get('nivel_2')
         cargar_configuraciones = False
                 
-        path = configuraciones.get('background')
-        fondo = pygame.image.load(path)
+
+        fondo = pygame.image.load(configuraciones.get('background'))
         fondo = pygame.transform.scale(fondo,(ANCHO_VENTANA,ALTO_VENTANA))
 
         plataformas = pygame.sprite.Group()
@@ -93,6 +97,7 @@ while its_running:
     #Enemigos   
     enemigos_vivos = len(grupo_enemigos)        
     for enemigo in grupo_enemigos:
+        print(f'vida enemigo: {enemigo.lives}')
         enemigo.draw(SCREEN)
         enemigo.update(grupo_proyectiles_jugador,grupo_enemigos,jugador)
 

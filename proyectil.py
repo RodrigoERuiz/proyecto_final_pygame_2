@@ -27,18 +27,14 @@ class Proyectil(pygame.sprite.Sprite):
         self.draw(screen)
         
         #if jugador.rect.colliderect(lista_proyectiles_enemigos.rect):#separar entre proyectiles del jugador y proyectiles del enemigo sino cuando el jugador dispara tambien le saca vida a el
-        if pygame.sprite.groupcollide(lista_proyectiles_enemigos, [jugador], True, False) or pygame.sprite.groupcollide(lista_proyectiles_jugador, enemigos, True, True):
-            # if jugador.vida > 0:
-            #     jugador.vida -= 1
-                #if self in lista_proyectiles:
+        if pygame.sprite.groupcollide(lista_proyectiles_enemigos, [jugador], True, False) or\
+            pygame.sprite.groupcollide(lista_proyectiles_jugador, enemigos, True, True):
                 self.kill()
-
-
-                
-                
-        # if self.rect.x < 0 or self.rect.x > ANCHO_VENTANA:
-        #     if self in lista_proyectiles_jugador:
-        #         self.kill()
+    
+        if self.rect.x < 0 or self.rect.x > ANCHO_VENTANA:
+            if self in lista_proyectiles_jugador:
+                self.kill()
+                #print("Proyectil eliminado")
 
         for plataforma in plataformas:
             if self.rect.colliderect(plataforma.rect) and self in lista_proyectiles_jugador:

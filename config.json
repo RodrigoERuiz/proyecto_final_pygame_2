@@ -8,7 +8,7 @@
     "nivel_1":{
         
         "background": "recursos/backgrounds/41530.jpg",
-        "cantidad_enemigos" : 10,
+        "cantidad_enemigos" : 3,
         "cantidad_frutas" : 2,
 
         "plataformas_coord":[
@@ -31,7 +31,7 @@
         ],
 
         "enemigo": {
-            "vidas" : 10,
+            "vidas" : 100000000000000,
             "velocidad_min" : 3,
             "velocidad_max" : 5,
             "coords" : [

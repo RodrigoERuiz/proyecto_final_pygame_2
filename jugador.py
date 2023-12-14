@@ -86,6 +86,13 @@ class Jugador(pygame.sprite.Sprite) :
         self.grupo_jugador = pygame.sprite.GroupSingle()
         self.grupo_jugador.add(self)
         self.grupo_proyectiles_jugador = pygame.sprite.Group()
+        self.sonido_disparo = pygame.mixer.Sound("recursos\sounds\efectos\disparo.wav")
+        self.sonido_jump = pygame.mixer.Sound("recursos\sounds\efectos\jump.wav")
+        self.sonido_daño = pygame.mixer.Sound("recursos\sounds\efectos\dieenemy.wav")
+        self.sonido_latidos = pygame.mixer.Sound("recursos\sounds\efectos\latidos.mp3")
+        self.sonido_recoleccion = pygame.mixer.Sound("recursos\sounds\efectos\life_pickup.mp3")
+        
+        
         
         
     def draw(self,screen:pygame.surface):
@@ -125,6 +132,8 @@ class Jugador(pygame.sprite.Sprite) :
         self.controlar_daño_por_trampas(grupo_trampas)
         self.controlar_recoleccion_frutas(grupo_frutas)
         self.hubo_colision(grupo_enemigos)
+        if self.vida <= 30:
+            self.sonido_latidos.play()
         if self.todos_los_enemigos_vencidos(grupo_enemigos):
             self.nivel_actual += 1  #controlar que no se pase
             return True
@@ -145,7 +154,8 @@ class Jugador(pygame.sprite.Sprite) :
                 
     def controlar_recoleccion_frutas(self, grupo_frutas:pygame.sprite.Group):
         for fruta in grupo_frutas:
-            if self.rect.colliderect(fruta.rect):
+            if fruta.item_activo and self.rect.colliderect(fruta.rect):
+                self.sonido_recoleccion.play()
                 self.score += 10
                 if self.vida < 80:
                     self.vida = min(self.vida + 20, 100)  # Aumentar en 20 sin pasar de 100
@@ -193,11 +203,13 @@ class Jugador(pygame.sprite.Sprite) :
             self.is_jump = True
             self.velocidad_y = 19
             #self.add_y(self.altura_salto)
+            self.sonido_jump.play()
             
         #DISPARO
         for evento in lista_eventos:
             if  evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_e and not self.is_jump:
+                    self.sonido_disparo.play()
                     proyectil = self.disparar()
                     grupo_proyectiles_jugador.add(proyectil)
             
@@ -222,8 +234,10 @@ class Jugador(pygame.sprite.Sprite) :
             for enemigo in grupo_enemigos:
                 if self.rect.colliderect(enemigo.rect) and not self.hubo_colision_previa:
                     if DEBUG:
-                        print("Hubo colisión")
-                        print(f'Te quedan: {self.vida} puntos de vida')
+                        pass
+                        #print("Hubo colisión")
+                        #print(f'Te quedan: {self.vida} puntos de vida')
+                    self.sonido_daño.play()
                     self.vida -= 10
                     self.hubo_colision_previa = True
                     self.tiempo_ultima_colision = tiempo_actual

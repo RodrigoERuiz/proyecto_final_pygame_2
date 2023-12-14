@@ -13,60 +13,20 @@ class Enemigo(pygame.sprite.Sprite):
         #self.configs = SurfaceManager.get_config('config.json').get('nivel_1').get('enemigo') VERSION ORIGINAL
         self.configs = SurfaceManager.get_config('config.json').get(f'nivel_{self.nivel}').get('enemigo')
         self.stand_r = [
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_000.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_001.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_002.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_003.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_004.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_005.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\IDLE\IDLE_006.png'),
-                        
-                        #pygame.image.load(self.configs.get('stand_r')[i]) for i in range(7)
                         pygame.image.load(path) for path in self.configs.get('self.stand_r')
-
                     ]
         
         self.walk_r = [
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_000.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_001.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_002.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_003.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_004.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_005.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\WALK\WALK_006.png'),
                         pygame.image.load(path) for path in self.configs.get('self.walk_r')
-
                     ]
         
         self.run_r = [
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_000.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_001.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_002.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_003.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_004.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_005.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\RUN\RUN_006.png'),
                         pygame.image.load(path) for path in self.configs.get('self.run_r')
                     ]
         self.attack_r = [
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_000.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_001.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_002.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_003.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_004.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_005.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\ATTAK\ATTAK_006.png'),
-                        pygame.image.load(path) for path in self.configs.get('self.attack_r')
-
+                            pygame.image.load(path) for path in self.configs.get('self.attack_r')
                         ]
         self.die_r = [
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_000.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_001.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_002.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_003.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_004.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_005.png'),
-                        # pygame.image.load('recursos\sprites\enemies\ork_sword\DIE\DIE_006.png')
                         pygame.image.load(path) for path in self.configs.get('self.die_r')
                     ]
        
@@ -84,12 +44,9 @@ class Enemigo(pygame.sprite.Sprite):
         
         self.coord_x = coord_x
         self.coord_y = coord_y
-        # self.coord_x = self.configs.get('coords')[0].get('x')
-        # self.coord_y = self.configs.get('coords')[0].get('y')
         self.frame_actual = 0
         self.animacion_actual = self.stand_l
         self.image = self.animacion_actual[self.frame_actual]
-        #self.image = pygame.transform.scale(self.image,(80,80)) #borrar si queda mal
         self.rect = self.image.get_rect()
         self.rect.y = self.coord_y #verficar si conviene dejarlo afuera
         self.velocidad_min  = self.configs.get('velocidad_min')
@@ -105,6 +62,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.coordenadas = self.configs.get("coords")
         self.grupo_proyectiles_enemigo = pygame.sprite.Group()
         self.proyectiles_impactados = set()
+        self.sonido_die = pygame.mixer.Sound("recursos\sounds\efectos\dieenemy.wav")
         
         
         
@@ -190,7 +148,8 @@ class Enemigo(pygame.sprite.Sprite):
 
         #grupo_enemigos.draw(SCREEN)
         for enemigo in grupo_enemigos:
-            enemigo.detectar_disparos(grupo_enemigos,jugador)
+            #enemigo.detectar_disparos(grupo_enemigos,jugador)
+            enemigo.detectar_disparos(jugador.grupo_proyectiles_jugador)
             # if enemigo.esta_muerto():
             #     #jugador.score += 10
             #     enemigo.hacer_animacion('die')
@@ -199,22 +158,21 @@ class Enemigo(pygame.sprite.Sprite):
                 
 
         
-    def detectar_disparos(self,grupo_enemigos:pygame.sprite.Group,jugador):    #ver si conviene hacerlo con el grupo de sprites
-        for enemigo in grupo_enemigos:
-            for proyectil in jugador.grupo_proyectiles_jugador:
-                if enemigo.rect.colliderect(proyectil.rect) and proyectil not in self.proyectiles_impactados:
-                    enemigo.lives -= 1
-                    self.proyectiles_impactados.add(proyectil)
-                    #proyectil.kill()
-                if proyectil.rect.right > ANCHO_VENTANA or proyectil.rect.left < 0:
-                    proyectil.kill()
+    # def detectar_disparos(self,grupo_enemigos:pygame.sprite.Group,jugador):    #ver si conviene hacerlo con el grupo de sprites
+    #     for enemigo in grupo_enemigos:
+    #         for proyectil in jugador.grupo_proyectiles_jugador:
+    #             if enemigo.rect.colliderect(proyectil.rect) and proyectil not in self.proyectiles_impactados:
+    #                 enemigo.lives -= 1
+    #                 self.proyectiles_impactados.add(proyectil)
+    
+    def detectar_disparos(self, grupo_proyectiles_jugador: pygame.sprite.Group):
+        proyectiles_impactados = pygame.sprite.groupcollide(grupo_proyectiles_jugador, [self], True, False)
+        for proyectil, enemigos_alcanzados in proyectiles_impactados.items():
+            for enemigo in enemigos_alcanzados:
                 
-    # def detectar_disparos(self, grupo_proyectiles, jugador):
-    #     for proyectil in grupo_proyectiles:
-    #         if proyectil not in self.proyectiles_impactados and self.rect.colliderect(proyectil.rect):
-    #             self.lives -= 1
-    #             self.proyectiles_impactados.add(proyectil)
-    #             proyectil.kill()
+                proyectil.kill()
+                enemigo.lives -= 1
+
                 
     def reiniciar_impactos(self):
         self.proyectiles_impactados = set()
