@@ -9,7 +9,7 @@ class Trampa(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.velocidad_x = 2
+        self.velocidad_x = 5
         
     def draw(self, screen):
         screen.blit(self.image, self.rect)

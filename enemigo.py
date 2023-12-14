@@ -63,8 +63,8 @@ class Enemigo(pygame.sprite.Sprite):
         self.grupo_proyectiles_enemigo = pygame.sprite.Group()
         self.proyectiles_impactados = set()
         self.sonido_die = pygame.mixer.Sound("recursos\sounds\efectos\dieenemy.wav")
-        
-        
+        self.is_looking_right = True
+    
         
     def aumentar_nivel(self):
         self.nivel += 1
@@ -112,12 +112,14 @@ class Enemigo(pygame.sprite.Sprite):
         self.animar()
         tiempo = pygame.time.get_ticks()
         if self.rect.right >= ANCHO_VENTANA:
+            self.is_looking_right = False
             self.direccion = -1  # Cambiar a la izquierda si alcanza el borde derecho
             if tiempo % 2 == 0:
                 self.animacion_actual = self.walk_l
             else: 
                 self.animacion_actual = self.attack_l
         elif self.rect.left <= 0:
+            self.is_looking_right = True
             self.direccion = 1   # Cambiar a la derecha si alcanza el borde izquierdo
             if tiempo % 2 == 0:
                 self.animacion_actual = self.walk_r
@@ -126,6 +128,11 @@ class Enemigo(pygame.sprite.Sprite):
         # Mover en la dirección correspondiente
         self.rect.x += self.velocidad * self.direccion
         self.coord_x = self.rect.x
+        
+        
+    def disparar(self):
+        proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
+        return proyectil
         
         
     def animar(self):
@@ -183,8 +190,9 @@ class Enemigo(pygame.sprite.Sprite):
         
         for i in range(n):
             #enemigo = Enemigo(random.randint(0,ANCHO_VENTANA),ALTO_VENTANA-height)
-            enemigo = Enemigo(lista_coord[i].get('x'),lista_coord[i].get('y'),nivel)
-            print(f'x: {lista_coord[i].get("x")} Y: {lista_coord[i].get("y")} ')
+            enemigo = Enemigo(lista_coord[i].get('x'),ALTO_VENTANA - 120, nivel)
+            #enemigo = Enemigo(lista_coord[i].get('x'),lista_coord[i].get('y'),nivel)
+            #print(f'x: {lista_coord[i].get("x")} Y: {lista_coord[i].get("y")} ')
             lista_retorno.append(enemigo)
         return lista_retorno
 

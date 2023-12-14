@@ -24,6 +24,8 @@ class Item( pygame.sprite.Sprite):
                             pygame.image.load('recursos/sprites/frutas/15.png'),
                             pygame.image.load('recursos/sprites/frutas/16.png')
                         ]
+        self.escala = 1.6  # self.Escala por 2 (ajusta el valor según lo que necesites)
+        self.animacion = [pygame.transform.scale(img, (img.get_width() * self.escala, img.get_height() * self.escala)) for img in self.animacion]
         self.frame_actual = 0
         self.image = self.animacion[self.frame_actual]
         self.rect = self.image.get_rect()
