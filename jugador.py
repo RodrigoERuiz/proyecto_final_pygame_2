@@ -91,6 +91,9 @@ class Jugador(pygame.sprite.Sprite) :
         self.sonido_daño = pygame.mixer.Sound("recursos\sounds\efectos\dieenemy.wav")
         self.sonido_latidos = pygame.mixer.Sound("recursos\sounds\efectos\latidos.mp3")
         self.sonido_recoleccion = pygame.mixer.Sound("recursos\sounds\efectos\life_pickup.mp3")
+        self.is_shooting = False
+        self.cooldown = 1000
+        self.tiempo_ultimo_disparo = 0
         
         
         
@@ -144,7 +147,7 @@ class Jugador(pygame.sprite.Sprite) :
                 
     def controlar_recoleccion_frutas(self, grupo_frutas:pygame.sprite.Group):
         for fruta in grupo_frutas:
-            if fruta.item_activo and self.rect.colliderect(fruta.rect):
+            if fruta.item_activo and self.rect.colliderect(fruta.rect) and self.vida != 100:
                 self.sonido_recoleccion.play()
                 self.score += 10
                 if self.vida < 80:
@@ -197,13 +200,17 @@ class Jugador(pygame.sprite.Sprite) :
             
         #DISPARO
         for evento in lista_eventos:
+            tiempo_actual = pygame.time.get_ticks()
             if  evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_e and not self.is_jump:
+                if evento.key == pygame.K_e and not self.is_jump and not self.is_shooting and tiempo_actual - self.tiempo_ultimo_disparo >= self.cooldown:
+                    self.tiempo_ultimo_disparo = tiempo_actual
+                    self.is_shooting = True
                     self.sonido_disparo.play()
                     proyectil = self.disparar()
                     grupo_proyectiles_jugador.add(proyectil)
+                else:    
+                    self.is_shooting = False
             
-     
     def controlar_limites_pantalla(self):
         if self.rect.right >= ANCHO_VENTANA:
             #self.coord_x = ANCHO_VENTANA - self.rect.width
@@ -211,9 +218,7 @@ class Jugador(pygame.sprite.Sprite) :
         elif self.rect.left <= 0:
             #self.coord_x = 0
             self.set_x(0)
-            
-
-        
+                    
     def hubo_colision(self, grupo_enemigos:pygame.sprite.Group):
         '''
         Si el jugador entra en cotacto con cualquier enemigo pierde diez punto de vida

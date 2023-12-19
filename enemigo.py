@@ -1,7 +1,7 @@
 import pygame
 from auxiliar import SurfaceManager
 from constantes import *
-#from jugador import Jugador
+from jugador import Jugador
 import random
 from proyectil import *
 
@@ -10,7 +10,6 @@ class Enemigo(pygame.sprite.Sprite):
     def __init__(self,coord_x,coord_y,nivel):
         super().__init__()
         self.nivel = nivel
-        #self.configs = SurfaceManager.get_config('config.json').get('nivel_1').get('enemigo') VERSION ORIGINAL
         self.configs = SurfaceManager.get_config('config.json').get(f'nivel_{self.nivel}').get('enemigo')
         self.stand_r = [
                         pygame.image.load(path) for path in self.configs.get('self.stand_r')
@@ -65,6 +64,8 @@ class Enemigo(pygame.sprite.Sprite):
         self.proyectiles_impactados = set()
         self.sonido_die = pygame.mixer.Sound("recursos\sounds\efectos\dieenemy.wav")
         self.is_looking_right = True
+        self.tiempo_entre_colisiones = 150
+        self.tiempo_ultima_colision = 0 
     
         
     def aumentar_nivel(self):
@@ -84,7 +85,7 @@ class Enemigo(pygame.sprite.Sprite):
     def hacer_animacion(self, animacion: str):
         if animacion == 'die':
             self.animacion_actual = self.die_r
-            self.frame_actual = 0  # Reiniciar el índice del fotograma
+            self.frame_actual = 0  
 
         
     
@@ -155,17 +156,47 @@ class Enemigo(pygame.sprite.Sprite):
         self.coord_y = self.rect.y  
 
         #grupo_enemigos.draw(SCREEN)
-        for enemigo in grupo_enemigos:
-            enemigo.detectar_disparos(jugador.grupo_proyectiles_jugador)
+        # for enemigo in grupo_enemigos:
+        #     enemigo.detectar_disparos(jugador.grupo_proyectiles_jugador, jugador)
 
     
-    def detectar_disparos(self, grupo_proyectiles_jugador: pygame.sprite.Group):
-        proyectiles_impactados = pygame.sprite.groupcollide(grupo_proyectiles_jugador, [self], True, False)
-        for proyectil, enemigos_alcanzados in proyectiles_impactados.items():
-            for enemigo in enemigos_alcanzados:
-                proyectil.kill()
-                enemigo.lives -= 1
+    # def detectar_disparos(self, grupo_proyectiles_jugador: pygame.sprite.Group):
+    #     proyectiles_impactados = pygame.sprite.groupcollide(grupo_proyectiles_jugador, [self], True, False)
+    #     for proyectil, enemigos_alcanzados in proyectiles_impactados.items():
+    #         for enemigo in enemigos_alcanzados:
+    #             proyectil.kill()
+    #             enemigo.lives -= 1
 
+    # def detectar_disparos(self, grupo_disparos_jugador, jugador:Jugador):
+    #     tiempo_actual = pygame.time.get_ticks()
+    #     print("entro a la funcion detectar disparo")
+    #     for disparo in grupo_disparos_jugador:
+    #         if disparo.rect.colliderect(self.rect) and tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
+    #             self.tiempo_ultima_colision = tiempo_actual
+    #             self.lives -= 1
+    #             print("Le resto 1 de vida al enemigo impactado")
+    #             if self.esta_muerto():
+    #                 print("Enemigo asesinado")
+    #                 disparo.kill()
+    #                 self.kill()
+    #                 jugador.score += 100
+    
+    def detectar_disparos(self, grupo_disparos_jugador, jugador: Jugador):
+        tiempo_actual = pygame.time.get_ticks()
+        print("entro a la funcion detectar disparo")
+        for disparo in grupo_disparos_jugador:
+            if disparo.rect.colliderect(self.rect) and disparo not in self.proyectiles_impactados and tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
+                self.tiempo_ultima_colision = tiempo_actual
+                self.proyectiles_impactados.add(disparo)  # Agregar el proyectil al conjunto de impactados
+                self.lives -= 1
+                print("Le resto 1 de vida al enemigo impactado")
+                if self.esta_muerto():
+                    print("Enemigo asesinado")
+                    disparo.kill()
+                    self.kill()
+                    jugador.score += 100
+                    
+                
                 
     def reiniciar_impactos(self):
         self.proyectiles_impactados = set()

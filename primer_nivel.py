@@ -4,11 +4,11 @@ from enemigo import Enemigo
 from plataforma import *
 import pygame
 from auxiliar import *
-from item import Item
+from item import *
 from trampa import Trampa
 
 
-def correr_nivel_1():
+def correr_nivel_1(its_running:bool):
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load("C:/Users/RODRIGO/Desktop/pygame desde cero/recursos/sounds/ambiente/ambiente.wav")
@@ -16,17 +16,10 @@ def correr_nivel_1():
     pygame.mixer.music.play(-1)
     reloj = pygame.time.Clock()
 
-
-    its_running = True
-
     jugador = Jugador(500,200,5,1)
 
-    grupo_proyectiles_jugador = pygame.sprite.Group()
-    grupo_proyectiles_enemigo = pygame.sprite.Group()
-
     configuraciones = SurfaceManager.get_config('config.json').get('nivel_1')
-    
-                        
+                    
     fondo = pygame.image.load(configuraciones.get('background'))
     fondo = pygame.transform.scale(fondo,(ANCHO_VENTANA,ALTO_VENTANA))
     
@@ -75,23 +68,32 @@ def correr_nivel_1():
         plataformas.update(SCREEN,jugador,plataformas)
         grupo_frutas.update(grupo_frutas,SCREEN,jugador)
         grupo_trampas.update(SCREEN)
-        grupo_proyectiles_jugador.update(SCREEN, grupo_enemigos, grupo_proyectiles_enemigo, jugador, plataformas,grupo_proyectiles_jugador)
-        grupo_proyectiles_enemigo.update(SCREEN, grupo_enemigos, grupo_proyectiles_jugador, jugador, plataformas,grupo_proyectiles_jugador)
+        for proyectil in jugador.grupo_proyectiles_jugador:
+            for enemigo in grupo_enemigos:
+                if proyectil.rect.colliderect(enemigo.rect):
+                    proyectil.kill()
+            proyectil.actualizar(SCREEN, grupo_enemigos, enemigo.grupo_proyectiles_enemigo, jugador, plataformas,jugador.grupo_proyectiles_jugador)
         
-
         #Enemigos         
         for enemigo in grupo_enemigos:
             enemigo.draw(SCREEN)
-            enemigo.update(grupo_proyectiles_jugador,grupo_enemigos,jugador)
+            enemigo.update(jugador.grupo_proyectiles_jugador,grupo_enemigos,jugador)
+            for disparo in jugador.grupo_proyectiles_jugador:
+                if disparo.rect.colliderect(enemigo.rect):
+                    print("enemigo -1 de vida")
+                    enemigo.lives -= 1
+                if enemigo.lives == 0:
+                    print("enemigo muerto")
+                    enemigo.kill()
+                    jugador.score += 100
+            enemigo.aplicar_gravedad()
 
-    
-        jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, grupo_proyectiles_jugador,grupo_trampas,grupo_enemigos)
+        jugador.actualizar(plataformas, grupo_frutas, lista_eventos, teclas_presionadas, SCREEN, jugador.grupo_proyectiles_jugador,grupo_trampas,grupo_enemigos)
         
         SurfaceManager.draw_text(SCREEN, f'tiempo: {int(pygame.time.get_ticks()/1000)}', 25, ANCHO_VENTANA -70, 10)
         SurfaceManager.draw_text(SCREEN, f'Puntuación: {str(jugador.score)}', 25, ANCHO_VENTANA // 2, 10)
         SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)
         
-
         pygame.display.update()
 
     pygame.quit()
