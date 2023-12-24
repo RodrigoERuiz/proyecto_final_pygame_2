@@ -66,7 +66,33 @@ class Enemigo(pygame.sprite.Sprite):
         self.is_looking_right = True
         self.tiempo_entre_colisiones = 150
         self.tiempo_ultima_colision = 0 
-    
+        self.rect_vision = pygame.Rect(self.rect.left, self.rect.top,ANCHO_VENTANA, 10)
+        self.is_shooting = False
+        self.cooldown = 1000
+        self.tiempo_ultimo_disparo = 0
+        
+        
+    def disparar(self, jugador_principal):
+        tiempo_actual = pygame.time.get_ticks()
+        if self.rect_vision.colliderect(jugador_principal.rect) and not self.is_shooting and tiempo_actual - self.tiempo_ultimo_disparo >= self.cooldown:
+            print("El enemigo ve al jugador y puede disparar")
+            self.tiempo_ultimo_disparo = tiempo_actual
+            self.is_shooting = True
+            #self.sonido_disparo.play()
+            proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
+            self.grupo_proyectiles_enemigo.add(proyectil)
+        else:    
+            self.is_shooting = False
+
+    def actualizar_rect_vision(self):
+        altura_ojos_enemigo = self.coord_y + self.height // 3  # Posición vertical de los ojos del enemigo
+
+        if self.is_looking_right:
+            # Si el enemigo mira hacia la derecha, el rectángulo va desde su posición hasta el borde derecho de la pantalla
+            self.rect_vision = pygame.Rect(self.rect.right, altura_ojos_enemigo, ANCHO_VENTANA - self.rect.right, 10)
+        else:
+            # Si el enemigo mira hacia la izquierda, el rectángulo va desde el borde izquierdo de la pantalla hasta su posición
+            self.rect_vision = pygame.Rect(0, altura_ojos_enemigo, self.rect.left, 10)
         
     def aumentar_nivel(self):
         self.nivel += 1
@@ -75,6 +101,7 @@ class Enemigo(pygame.sprite.Sprite):
         screen.blit(self.animacion_actual[self.frame_actual],self.rect)
         if DEBUG:
             pygame.draw.rect(SCREEN, (0, 255, 0), self.rect, 2)
+            pygame.draw.rect(SCREEN, (0, 255, 255), self.rect_vision, 2)
             
         
         
@@ -93,11 +120,13 @@ class Enemigo(pygame.sprite.Sprite):
     
     def aplicar_gravedad(self):
         if self.coord_y < ALTO_VENTANA - self.height: 
+            self.actualizar_rect_vision()
             self.coord_y -= self.velocidad_y
             self.velocidad_y -= 1  
             
             
-            if self.coord_y >= ALTO_VENTANA - self.height:  
+            if self.coord_y >= ALTO_VENTANA - self.height:
+                self.actualizar_rect_vision()  
                 self.coord_y = ALTO_VENTANA - self.height
                 self.velocidad_y = 0
     
@@ -105,8 +134,10 @@ class Enemigo(pygame.sprite.Sprite):
     
     def controlar_limites_pantalla(self):
         if self.rect.right >= ANCHO_VENTANA:
+            self.actualizar_rect_vision()
             self.coord_x = ANCHO_VENTANA - self.rect.width
         elif self.rect.left <= 0:
+            self.actualizar_rect_vision()
             self.coord_x = 0
             
                 
@@ -127,14 +158,14 @@ class Enemigo(pygame.sprite.Sprite):
                 self.animacion_actual = self.walk_r
             else:
                 self.animacion_actual = self.attack_r
-        
+        self.actualizar_rect_vision()
         self.rect.x += self.velocidad * self.direccion
         self.coord_x = self.rect.x
         
         
-    def disparar(self):
-        proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
-        return proyectil
+    # def disparar(self):
+    #     proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
+    #     return proyectil
         
         
     def animar(self):
@@ -153,33 +184,10 @@ class Enemigo(pygame.sprite.Sprite):
         self.controlar_limites_pantalla()
         self.mover()
         self.coord_x = self.rect.x  
-        self.coord_y = self.rect.y  
-
-        #grupo_enemigos.draw(SCREEN)
-        # for enemigo in grupo_enemigos:
-        #     enemigo.detectar_disparos(jugador.grupo_proyectiles_jugador, jugador)
-
-    
-    # def detectar_disparos(self, grupo_proyectiles_jugador: pygame.sprite.Group):
-    #     proyectiles_impactados = pygame.sprite.groupcollide(grupo_proyectiles_jugador, [self], True, False)
-    #     for proyectil, enemigos_alcanzados in proyectiles_impactados.items():
-    #         for enemigo in enemigos_alcanzados:
-    #             proyectil.kill()
-    #             enemigo.lives -= 1
-
-    # def detectar_disparos(self, grupo_disparos_jugador, jugador:Jugador):
-    #     tiempo_actual = pygame.time.get_ticks()
-    #     print("entro a la funcion detectar disparo")
-    #     for disparo in grupo_disparos_jugador:
-    #         if disparo.rect.colliderect(self.rect) and tiempo_actual - self.tiempo_ultima_colision >= self.tiempo_entre_colisiones:
-    #             self.tiempo_ultima_colision = tiempo_actual
-    #             self.lives -= 1
-    #             print("Le resto 1 de vida al enemigo impactado")
-    #             if self.esta_muerto():
-    #                 print("Enemigo asesinado")
-    #                 disparo.kill()
-    #                 self.kill()
-    #                 jugador.score += 100
+        self.coord_y = self.rect.y 
+        self.actualizar_rect_vision()
+        #if self.rect_vision.colliderect(jugador.rect):
+        self.disparar(jugador)
     
     def detectar_disparos(self, grupo_disparos_jugador, jugador: Jugador):
         tiempo_actual = pygame.time.get_ticks()
@@ -195,9 +203,7 @@ class Enemigo(pygame.sprite.Sprite):
                     disparo.kill()
                     self.kill()
                     jugador.score += 100
-                    
-                
-                
+                       
     def reiniciar_impactos(self):
         self.proyectiles_impactados = set()
         

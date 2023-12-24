@@ -1,6 +1,6 @@
 import pygame, sys
 from button import Button
-from constantes import *
+from constantes import * 
 
 pygame.init()
 pygame.mixer.init()

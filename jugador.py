@@ -86,18 +86,17 @@ class Jugador(pygame.sprite.Sprite) :
         self.grupo_jugador = pygame.sprite.GroupSingle()
         self.grupo_jugador.add(self)
         self.grupo_proyectiles_jugador = pygame.sprite.Group()
+        
         self.sonido_disparo = pygame.mixer.Sound("recursos\sounds\efectos\disparo.wav")
         self.sonido_jump = pygame.mixer.Sound("recursos\sounds\efectos\jump.wav")
         self.sonido_daño = pygame.mixer.Sound("recursos\sounds\efectos\dieenemy.wav")
         self.sonido_latidos = pygame.mixer.Sound("recursos\sounds\efectos\latidos.mp3")
         self.sonido_recoleccion = pygame.mixer.Sound("recursos\sounds\efectos\life_pickup.mp3")
+        
         self.is_shooting = False
         self.cooldown = 1000
         self.tiempo_ultimo_disparo = 0
-        
-        
-        
-        
+    
     def draw(self,screen:pygame.surface):
         screen.blit(self.animacion_actual[self.frame_actual],self.rect)
         if DEBUG:
@@ -118,12 +117,13 @@ class Jugador(pygame.sprite.Sprite) :
                 self.is_jump = False
                 self.velocidad_y = 0
         
-
-    def actualizar(self,plataformas:pygame.sprite.Group, grupo_frutas:pygame.sprite.Group, lista_eventos, lista_teclas, screen: pygame.Surface, proyectiles:pygame.sprite.Group,grupo_trampas:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group):
+    def actualizar(self, grupo_frutas:pygame.sprite.Group, lista_eventos, lista_teclas, screen: pygame.Surface,\
+                    grupo_trampas:pygame.sprite.Group,grupo_enemigos:pygame.sprite.Group):
         self.draw(screen)
-        self.mover(lista_teclas,lista_eventos,proyectiles)
+        self.mover(lista_teclas)
         self.rect.x = self.coord_x
         self.rect.y = self.coord_y
+        self.disparar(lista_eventos)
         self.controlar_limites_pantalla()
         tiempo_actual = pygame.time.get_ticks()
         if tiempo_actual - self.frame_tiempo_anterior > self.frame_tiempo_intervalo:
@@ -137,7 +137,6 @@ class Jugador(pygame.sprite.Sprite) :
         self.hubo_colision(grupo_enemigos)
         if self.vida <= 30:
             self.sonido_latidos.play()
-   
         
     def controlar_daño_por_trampas(self, grupo_trampas:pygame.sprite.Group):
         for trampa in grupo_trampas:
@@ -154,9 +153,7 @@ class Jugador(pygame.sprite.Sprite) :
                     self.vida = min(self.vida + 20, 100)  # Aumentar en 20 sin pasar de 100
                 print('Colisioné con una fruta')
             
-        
-        
-    def mover(self, lista_teclas: list,lista_eventos, grupo_proyectiles_jugador:pygame.sprite.Group ):
+    def mover(self, lista_teclas: list):
             #CORRER DERECHA
         if lista_teclas[pygame.K_d] and lista_teclas[pygame.K_LSHIFT]  and not self.is_jump:
             self.animacion_actual = self.run_r
@@ -198,16 +195,17 @@ class Jugador(pygame.sprite.Sprite) :
             #self.add_y(self.altura_salto)
             self.sonido_jump.play()
             
-        #DISPARO
+    
+    def disparar(self, lista_eventos):
+        tiempo_actual = pygame.time.get_ticks()
         for evento in lista_eventos:
-            tiempo_actual = pygame.time.get_ticks()
-            if  evento.type == pygame.KEYDOWN:
+            if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_e and not self.is_jump and not self.is_shooting and tiempo_actual - self.tiempo_ultimo_disparo >= self.cooldown:
                     self.tiempo_ultimo_disparo = tiempo_actual
                     self.is_shooting = True
                     self.sonido_disparo.play()
-                    proyectil = self.disparar()
-                    grupo_proyectiles_jugador.add(proyectil)
+                    proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
+                    self.grupo_proyectiles_jugador.add(proyectil)
                 else:    
                     self.is_shooting = False
             
@@ -240,9 +238,6 @@ class Jugador(pygame.sprite.Sprite) :
             self.hubo_colision_previa = False
             
             
-    def disparar(self):
-        proyectil = Proyectil(self.rect.centerx, self.rect.centery, 1 if self.is_looking_right else -1)
-        return proyectil
     
     def add_x(self, delta_x):
         self.coord_x += delta_x
