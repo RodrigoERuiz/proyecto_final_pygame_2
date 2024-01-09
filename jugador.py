@@ -46,8 +46,21 @@ class Jugador(pygame.sprite.Sprite) :
                         pygame.image.load('recursos/sprites/Run/8.png').convert_alpha(),
                         pygame.image.load('recursos/sprites/Run/9.png').convert_alpha()
                     ]
+        self.jump_r = [
+                        pygame.image.load('recursos/sprites/Jump/0.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/1.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/2.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/3.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/4.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/5.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/6.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/7.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/8.png').convert_alpha(),
+                        pygame.image.load('recursos/sprites/Jump/9.png').convert_alpha()
+                    ]
 
         #imagenes de animacion escaladas
+        self.jump_l = SurfaceManager.preparar_imagen(self.jump_r,50 ,90)
         self.run_r = SurfaceManager.preparar_imagen(self.run_r,50 ,90)
         self.run_l = SurfaceManager.girar_sprites(self.run_r)
         self.stand_r = SurfaceManager.preparar_imagen(self.stand_r,50,90)
@@ -135,8 +148,18 @@ class Jugador(pygame.sprite.Sprite) :
         self.controlar_daño_por_trampas(grupo_trampas)
         self.controlar_recoleccion_frutas(grupo_frutas)
         self.hubo_colision(grupo_enemigos)
+        self.cotrolar_daños_por_disparo_enemigo(grupo_enemigos)
         if self.vida <= 30:
             self.sonido_latidos.play()
+            
+    def cotrolar_daños_por_disparo_enemigo(self, grupo_enemigo:pygame.sprite.Group):
+        for enemigo in grupo_enemigo:
+            for disparo in enemigo.grupo_proyectiles_enemigo:
+                if disparo.rect.colliderect(self.rect):
+                    disparo.kill()
+                    print("Me dispararon")
+                    self.sonido_daño.play()
+                    self.vida -= 1
         
     def controlar_daño_por_trampas(self, grupo_trampas:pygame.sprite.Group):
         for trampa in grupo_trampas:
@@ -190,10 +213,14 @@ class Jugador(pygame.sprite.Sprite) :
                 
             #SALTAR
         if lista_teclas[pygame.K_SPACE] and not self.is_jump:
+            #self.add_y(-self.velocidad_y)
+            #self.animacion_actual = self.jump_r
             self.is_jump = True
             self.velocidad_y = 19
+            
             #self.add_y(self.altura_salto)
             self.sonido_jump.play()
+            
             
     
     def disparar(self, lista_eventos):

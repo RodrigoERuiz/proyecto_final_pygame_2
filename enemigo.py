@@ -68,7 +68,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.tiempo_ultima_colision = 0 
         self.rect_vision = pygame.Rect(self.rect.left, self.rect.top,ANCHO_VENTANA, 10)
         self.is_shooting = False
-        self.cooldown = 1000
+        self.cooldown = 2000
         self.tiempo_ultimo_disparo = 0
         
         

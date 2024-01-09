@@ -86,13 +86,13 @@ def correr_nivel_1(its_running:bool):
                     print("enemigo muerto")
                     enemigo.kill()
                     jugador.score += 100
+            for proyectil in enemigo.grupo_proyectiles_enemigo:
+                proyectil.actualizar(SCREEN, grupo_enemigos, enemigo.grupo_proyectiles_enemigo, jugador, plataformas,jugador.grupo_proyectiles_jugador)
             enemigo.aplicar_gravedad() #no esta reciendo gravedad
 
             enemigo.draw(SCREEN)
         jugador.actualizar( grupo_frutas, lista_eventos, teclas_presionadas, SCREEN,grupo_trampas,grupo_enemigos)
         
-        for proyectil in enemigo.grupo_proyectiles_enemigo:
-            proyectil.actualizar(SCREEN, grupo_enemigos, enemigo.grupo_proyectiles_enemigo, jugador, plataformas,jugador.grupo_proyectiles_jugador)
         SurfaceManager.draw_text(SCREEN, f'tiempo: {int(pygame.time.get_ticks()/1000)}', 25, ANCHO_VENTANA -70, 10)
         SurfaceManager.draw_text(SCREEN, f'Puntuación: {str(jugador.score)}', 25, ANCHO_VENTANA // 2, 10)
         SurfaceManager.draw_dibujar_barra_de_vida(SCREEN,5,5,jugador.vida)

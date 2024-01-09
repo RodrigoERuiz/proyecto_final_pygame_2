@@ -5,7 +5,7 @@ from constantes import *
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load("recursos/sounds/ambiente/Prórroga de Tiempo A.ogg")
-
+   
 SCREEN = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Menu")
 
@@ -16,7 +16,7 @@ its_running = True
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
-
+  
 def main_menu():
     while True:
         
